@@ -37,13 +37,13 @@ const ProductCard = ( {data}: ProductCardProps) => {
                   </div>
                   <div className="mt-4 flex gap-4 justify-center">
                     {}
-                    <button
+                    <div
                      
                     
                     ><ProductActions
                    
                       product={product}/>
-                    </button>
+                    </div>
                    
                   </div>
                 </div>
