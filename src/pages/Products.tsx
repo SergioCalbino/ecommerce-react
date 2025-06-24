@@ -9,7 +9,7 @@ const Products = () => {
   const [page, setPage] = useState(0)
 
   const { data, isLoading, isError, error } = useProductsQuery(page);
-  console.log(data, isLoading, isError, error);
+ 
 
   return (
     <div>

@@ -12,7 +12,6 @@ export default function Pagination({
 	onPageChange,
 }: PaginationProps) {
 
-	console.log(`Current Page: ${currentPage}, Total Pages: ${totalPages}`);
 
 	return (
 		<div className="flex justify-center items-center space-x-2 mt-8">

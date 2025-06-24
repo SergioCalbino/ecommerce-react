@@ -1,4 +1,6 @@
 import type { Product } from '@/schemas/product.schema'
+import type { Cartitem } from '@/schemas/shoppingCart.schema'
+import { useCartStore } from '@/store/useCartStore'
 import React, { useState } from 'react'
 
 
@@ -8,16 +10,26 @@ type ProductActionsProps = {
 
 const ProductActions = ({product}: ProductActionsProps) => {
 
-    const [qty, setQty] = useState(0);
+    const [qty, setQty] = useState(1);
     const [showControl, setShowControl] = useState(false)
+    const { addToCart, items, total } = useCartStore()
     console.log(qty)
 
-    const handleAccept = () => {
-    if (qty <= 0) {
-      alert('Por favor, selecciona una cantidad válida.');
-      return;
+    const handleAccept =  () => {
+    const cartToItem: Cartitem = {
+        product,
+        quantity: qty
+      }
+      addToCart(cartToItem)
+      setQty(1)
+      setShowControl(false)
+      
     }
-}
+
+    console.log("Carrito actualizado agregando items", items)
+    console.log("Total actualizado", total)
+    
+
 
   return (
     <div className="mt-4 flex gap-2 justify-center">
@@ -30,22 +42,19 @@ const ProductActions = ({product}: ProductActionsProps) => {
         </button>
       ) : (
         <>
+          <input
+          type='number'
+          min="1"
+           className="w-16 px-3 py-1 font-semibold" 
+           value={qty}
+          
+           onChange={(e) => setQty(Number(e.target.value))}
+          />
+         
           <button
-            onClick={() => setQty(qty > 1 ? qty - 1 : 1)}
-            className="cursor-pointer px-3 py-1 bg-gray-200 hover:bg-gray-300 rounded"
-          >
-            −
-          </button>
-          <span className="px-3 py-1 font-semibold">{qty}</span>
-          <button
-            onClick={() => setQty(qty + 1)}
-            className="cursor-pointer px-3 py-1 bg-gray-200 hover:bg-gray-300 rounded"
-          >
-            +
-          </button>
-          <button
-            // onClick={handleAccept}
-            className="cursor-pointer px-4 py-2 text-sm font-medium text-white bg-green-600 hover:bg-green-500 rounded-lg shadow transition"
+            onClick={handleAccept}
+            disabled={qty <= 0 || isNaN(qty)}
+            className="px-4 py-2 text-sm font-medium text-white bg-green-600 hover:bg-green-500 disabled:bg-gray-300 rounded-lg shadow transition"
           >
             Aceptar
           </button>
