@@ -2,6 +2,7 @@ import type { Product } from '@/schemas/product.schema'
 import type { Cartitem } from '@/schemas/shoppingCart.schema'
 import { useCartStore } from '@/store/useCartStore'
 import React, { useState } from 'react'
+import { toast } from 'react-toastify'
 
 
 type ProductActionsProps = {
@@ -18,11 +19,14 @@ const ProductActions = ({product}: ProductActionsProps) => {
     const handleAccept =  () => {
     const cartToItem: Cartitem = {
         product,
-        quantity: qty
+        quantity: qty,
+        subTotal: product.price * qty
       }
       addToCart(cartToItem)
       setQty(1)
       setShowControl(false)
+      toast.success("Producto agregado al carrito")
+      console.log("SubTotal actualizado",cartToItem.subTotal)
       
     }
 

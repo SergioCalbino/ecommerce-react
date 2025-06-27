@@ -1,5 +1,6 @@
 import Pagination from "@/components/Pagination";
 import ProductCard from "@/components/ProductCard";
+import ProductExample from "@/components/ProductExample";
 import useProductsQuery from "@/features/products/useProductsQuery";
 import { useState } from "react";
 
@@ -25,6 +26,9 @@ const Products = () => {
            <ProductCard
              data={data?.content || []}
            />
+           {/* <ProductExample
+              data={data?.content || []}
+           /> */}
         
             <Pagination
               currentPage={ page }
