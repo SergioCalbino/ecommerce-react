@@ -7,6 +7,7 @@ export const cartItemSchema = z.object({
     id: z.number().int().positive().optional(),
     quantity: z.number().int().positive(),
     product: productSchema,
+    subTotal: z.number().positive()
 })
 
 export const shoppingCartSchema = z.object({
