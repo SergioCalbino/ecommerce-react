@@ -17,5 +17,17 @@ export const shoppingCartSchema = z.object({
     total: z.number().nonnegative(),
 });
 
+export const shoppingCartDtoSchema = z.object({
+    customerDto: z.object({
+        customer_id: z.number().int().positive(),
+        email: z.string().email(),
+    }),
+    productDto: z.object({
+        id: z.number().positive()
+    }),
+    quantity: z.number().positive()
+})
+
 export type Cartitem = z.infer<typeof cartItemSchema>;
 export type ShoppingCart = z.infer<typeof shoppingCartSchema>;
+export type ShoppingCartDto = z.infer<typeof shoppingCartDtoSchema>;

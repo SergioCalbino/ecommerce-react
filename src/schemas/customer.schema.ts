@@ -11,6 +11,9 @@ export const customerSchema = z.object({
     orders: orderBaseSchema.array().optional(),
 
 })
+
+
+
 export type Customer = z.infer<typeof customerSchema>;
 
 
