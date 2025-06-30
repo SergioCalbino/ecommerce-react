@@ -1,6 +1,5 @@
 import Pagination from "@/components/Pagination";
 import ProductCard from "@/components/ProductCard";
-import ProductExample from "@/components/ProductExample";
 import useProductsQuery from "@/features/products/useProductsQuery";
 import { useState } from "react";
 
@@ -10,6 +9,8 @@ const Products = () => {
   const [page, setPage] = useState(0)
 
   const { data, isLoading, isError, error } = useProductsQuery(page);
+
+
  
 
   return (
