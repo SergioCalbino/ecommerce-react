@@ -21,5 +21,17 @@ export const orderSchema = orderBaseSchema.extend({
     customer: customerSchema,
 });
 
+
+//Esto es para el paso 2 del checkout
+export const checkoutStepTwoSchema = z.object({
+    cardNumber: z.string().min(13).max(19), 
+    expiration: z.string().regex(/^(0[1-9]|1[0-2])\/\d{2}$/), 
+    cvc: z.string().min(3).max(4),
+    cardName: z.string()
+});
+
 export type OrderItem = z.infer<typeof orderItemSchema>;
 export type Order = z.infer<typeof orderSchema>;
+
+//
+export type CheckoutStepTwo = z.infer<typeof checkoutStepTwoSchema>
