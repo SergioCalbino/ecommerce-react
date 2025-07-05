@@ -33,7 +33,7 @@ const ModalCart = ({ open, onClose }: modalCartProps) => {
         await mutateAsync(payload)
         console.log("Redirigiendo a checkout", items)
         clearCart()
-        // navigate("/checkout")
+        navigate("/checkout")
     }
     
 
