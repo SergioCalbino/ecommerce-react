@@ -2,6 +2,7 @@ import useShoppingCart from "@/features/shoppingCart/useShoppingCart";
 import { useCartStore } from "@/store/useCartStore";
 import { X, Trash2, CheckCircle } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 type modalCartProps = {
   open: boolean;
@@ -14,27 +15,39 @@ const ModalCart = ({ open, onClose }: modalCartProps) => {
 
   const navigate = useNavigate()
 
+
+
  
 
   //Agrega productos al carrito
   const handleSubmit = async () => {
      console.log("Items que voy a enviar:", items);
-    for(const item of items) {
-        const payload = {
-            customerDto: {
-                customer_id: 11,
-                email: "sergito@gmail.com",
-            },
-                quantity: item.quantity,
-                productDto: {
-                    id: item.product.id
-                }
-        }
-        await mutateAsync(payload)
-        console.log("Redirigiendo a checkout", items)
-        clearCart()
-        // navigate("/checkout")
-    }
+     try {
+       for(const item of items) {
+           const payload = {
+               customerDto: {
+                   customer_id: 11,
+                   email: "sergito@gmail.com",
+               },
+                   quantity: item.quantity,
+                   productDto: {
+                       id: item.product.id
+                   }
+           }
+           await mutateAsync(payload, { onSuccess: undefined})
+           
+          }
+          toast.success("Serás redireccionado")
+          console.log("Redirigiendo a checkout", items)
+          // clearCart()
+          onClose()
+          navigate("/checkout")
+      
+     } catch (error: unknown) {
+          toast.error("error")
+
+      
+     }
     
 
   }
