@@ -21,9 +21,10 @@ type CheckoutType = {
        cardName: "" 
      }
 
-     const {  register, handleSubmit, formState: {errors} } = useForm<CheckoutStepTwoData>()
+     const {  register, handleSubmit, formState: {errors} } = useForm<CheckoutStepTwoData>({defaultValues})
 
      const handleForm = (data:CheckoutStepTwoData ) => {
+      console.log(data)
       onSubmit(data)
      }
     
@@ -141,13 +142,13 @@ type CheckoutType = {
                   <button
                     type="button"
                     onClick={() => setStep(1)}
-                    className="rounded-lg bg-gray-200 px-5 py-2.5 text-gray-700 font-medium"
+                    className="rounded-lg bg-gray-200 px-5 py-2.5 text-gray-700 font-medium cursor-pointer"
                   >
                     Atrás
                   </button>
                   <button
                     type="submit"
-                    className="rounded-lg bg-blue-700 px-5 py-2.5 text-white font-medium"
+                    className="rounded-lg bg-blue-700 px-5 py-2.5 text-white font-medium cursor-pointer"
                   >
                     Siguiente
                   </button>

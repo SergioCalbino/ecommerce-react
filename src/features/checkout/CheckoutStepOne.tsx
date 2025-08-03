@@ -25,8 +25,9 @@ const CheckoutStepOne = ({ step, setStep, onSubmit }: checkoutType) => {
   }
 
   return (
+   
       <form
-            className="space-y-4 shadow-lg p-10 bg-gray-100"
+          className="w-full space-y-4 shadow-lg p-6 bg-gray-100 rounded-lg"
                 onSubmit={handleSubmit(handleForm)}
                 noValidate
               >
@@ -98,11 +99,13 @@ const CheckoutStepOne = ({ step, setStep, onSubmit }: checkoutType) => {
                 </div>
                 <button
                   type="submit"
-                  className="w-full rounded-lg bg-blue-700 px-5 py-2.5 text-white font-medium"
+                  className="w-full rounded-lg bg-blue-700 px-5 py-2.5 text-white font-medium cursor-pointer"
                 >
                   Siguiente
                 </button>
               </form>
+
+    
   )
 }
 

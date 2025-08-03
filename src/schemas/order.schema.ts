@@ -21,6 +21,14 @@ export const orderSchema = orderBaseSchema.extend({
     customer: customerSchema,
 });
 
+//Schema para enviar a la api de order
+
+export const orderSchemaDto = z.object({
+    date: z.date(),
+    customerDto: customerSchema.pick({email: true}),
+    state: z.enum(["PENDING", "PAID", "DELIVERED", "CANCELLED"]).optional()
+})
+
 
 //Esto es para el paso 2 del checkout
 export const checkoutStepTwoSchema = z.object({
@@ -35,3 +43,6 @@ export type Order = z.infer<typeof orderSchema>;
 
 //
 export type CheckoutStepTwo = z.infer<typeof checkoutStepTwoSchema>
+
+//Type para la api de order
+export type OrderDto = z.infer<typeof orderSchemaDto>
