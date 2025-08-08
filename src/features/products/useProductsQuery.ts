@@ -1,16 +1,19 @@
-import { productPageSchema } from '@/schemas/product.schema'
+
+import { getProducts } from '@/api/Products'
 import type { ProductPage } from '@/schemas/product.schema'
+import { useAuthStore } from '@/store/useAuthStore'
 import { useQuery } from '@tanstack/react-query'
-import axios from 'axios'
+
 
 
 const useProductsQuery = (page: number = 0, size: number = 8) => {
+
+    const token = useAuthStore.getState().token
+    console.log(token)
+
     return useQuery<ProductPage>({
         queryKey: ['products', page],
-            queryFn: async() => {
-                const response = await axios.get(`${import.meta.env.VITE_API_URL}/products?page=${page}&size=${size}&sort=price&direction=DESC`)
-                return productPageSchema.parse((response).data)
-            }
+            queryFn: ()=> getProducts(page, size)
         })
 }
 
