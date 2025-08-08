@@ -16,6 +16,8 @@ interface Auth {
     isAuthenticated: boolean,
     registerAuth: (token: string, user: User) => void,
     login : (accessToken: string, user: User) => void,
+    isHydrated: boolean,
+    setIsHydrated: (v:boolean) => void,
     logout: () => void;
     
 }
@@ -28,6 +30,8 @@ export const useAuthStore = create<Auth>()(
       accessToken: null,
       user: null,
       isAuthenticated: false,
+      isHydrated: false,
+      setIsHydrated: (v) => set({isHydrated: v}),
       
       registerAuth: (token, user) => set({token, user, isAuthenticated: true }),
 
@@ -47,8 +51,13 @@ export const useAuthStore = create<Auth>()(
       storage: createJSONStorage(() => localStorage), // (optional) by default, 'localStorage' is used
       partialize: (state) => ({
         token: state.token,
-        accessToken: state.accessToken
-      })
+        accessToken: state.accessToken,
+        user: state.user ? { name: state.user.name } : null,
+        isAuthenticated: state.isAuthenticated
+      }),
+     onRehydrateStorage: () => (state) => {
+        state?.setIsHydrated(true);
+      },
     },
   ),
 )
