@@ -20,7 +20,6 @@ const CheckoutStepOne = ({ step, setStep, onSubmit }: checkoutType) => {
   const { register, handleSubmit, formState: {errors}  } = useForm<CheckOutStepOne>({defaultValues})
 
   const handleForm = (data:CheckOutStepOne) => {
-    console.log(data)
     onSubmit(data)
   }
 

@@ -24,7 +24,6 @@ type CheckoutType = {
      const {  register, handleSubmit, formState: {errors} } = useForm<CheckoutStepTwoData>({defaultValues})
 
      const handleForm = (data:CheckoutStepTwoData ) => {
-      console.log(data)
       onSubmit(data)
      }
     

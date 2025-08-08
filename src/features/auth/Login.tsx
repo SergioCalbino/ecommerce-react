@@ -19,7 +19,7 @@ export default function Login() {
   const { login } = useAuthStore()
   const navigate = useNavigate()
 
-  const { mutate } = useMutation({
+  const { mutate, isPending } = useMutation({
     mutationFn: loginAccount,
     onError : (error: AxiosError<{message:string}>) => {
       console.log(error?.response?.data.message)
@@ -95,8 +95,9 @@ export default function Login() {
 
         <input
           type="submit"
-          value='Iniciar Sesión'
+          value={isPending ? 'Iniciando sesión...' : 'Iniciar Sesión'}
           className="bg-fuchsia-600 hover:bg-fuchsia-700 w-full p-3  text-white font-black  text-xl cursor-pointer"
+          disabled={isPending}
         />
       </form>
       <nav className="mt-10 flex flex-col space-y-4">
@@ -104,6 +105,11 @@ export default function Login() {
             className="text-center text-gray-300 font-normal"
         >
           ¿ No tienes cuenta ? Crear una
+        </Link>
+        <Link to={'/auth/forgot-password'}
+            className="text-center text-gray-300 font-normal"
+        >
+          ¿ Olvidaste la contraseña ? Recupérala
         </Link>
 
       </nav>

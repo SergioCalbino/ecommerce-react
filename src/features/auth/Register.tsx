@@ -33,13 +33,13 @@ export default function Register() {
     },
     onSuccess: (data) => {
         console.log(data)
-        const { token, customer } = data;
-        registerAuth(token, customer)
+        // const { token, customer } = data;
+        // registerAuth(token, customer)
         reset()
-        toast.success("Registrado de forma exitosa, serás redireccionado" , {
-          autoClose: 2000,
-         onClose:() =>  navigate("/")
-       })
+        toast.success("Registrado de forma exitosa, serás redireccionado al login" , {
+        onClose:() =>  navigate("/auth/login")
+      })
+
        
     }
   })
@@ -166,6 +166,11 @@ export default function Register() {
             className="text-center text-gray-300 font-normal"
         >
           ¿ Ya tienes cuenta ? Iniciar sesión
+        </Link>
+         <Link to={'/auth/forgot-password'}
+            className="text-center text-gray-300 font-normal"
+        >
+          ¿ Olvidaste la contraseña ? Recupérala
         </Link>
 
       </nav>

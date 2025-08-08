@@ -1,8 +1,6 @@
-import { createOrder } from '@/api/order';
 import type { CheckOutStepOne } from '@/schemas/customer.schema';
 import type { CheckoutStepTwo, OrderDto } from '@/schemas/order.schema';
 import React from 'react'
-import { useForm } from 'react-hook-form';
 import useOrder from '../order/useOrder';
 
 
