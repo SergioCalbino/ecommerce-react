@@ -12,7 +12,6 @@ import { Link } from 'react-router-dom'
 export const NavMenu = () => {
 
    const { user } = useAuthStore()
-   console.log(user);
 
   return (
     <>

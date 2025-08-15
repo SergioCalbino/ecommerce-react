@@ -16,8 +16,11 @@ export default function Login() {
   }
   const { register, handleSubmit, reset ,formState: { errors } } = useForm({ defaultValues: initialValues })
 
-  const { login } = useAuthStore()
+  const { login, user } = useAuthStore()
   const navigate = useNavigate()
+
+  console.log(user)
+
 
   const { mutate, isPending } = useMutation({
     mutationFn: loginAccount,
@@ -30,10 +33,10 @@ export default function Login() {
     onSuccess: (data) => {
       const { accessToken, customer } = data;
       login(accessToken, customer)
-      reset()
       toast.success("Logueado de forma exitosa, serás redireccionado" , {
         onClose:() =>  navigate("/")
       })
+      reset()
      
 
 
@@ -52,6 +55,7 @@ export default function Login() {
         className="space-y-8 p-10 bg-white"
         noValidate
       >
+         <fieldset disabled={isPending} className="space-y-8">
         <div className="flex flex-col gap-5">
           <label
             className="font-normal text-2xl"
@@ -71,7 +75,7 @@ export default function Login() {
             })}
           />
           {errors.email && (
-            errors.email.message
+            <span className="text-red-500 text-sm">{errors.email.message}</span>
           )}
         </div>
 
@@ -89,16 +93,18 @@ export default function Login() {
             })}
           />
           {errors.password && (
-            errors.password.message
+           <span className="text-red-500 text-sm">{errors.password.message}</span>
           )}
         </div>
 
         <input
           type="submit"
           value={isPending ? 'Iniciando sesión...' : 'Iniciar Sesión'}
-          className="bg-fuchsia-600 hover:bg-fuchsia-700 w-full p-3  text-white font-black  text-xl cursor-pointer"
+           className={`bg-fuchsia-600 hover:bg-fuchsia-700 w-full p-3 text-white font-black text-xl cursor-pointer 
+            ${isPending ? 'opacity-50 cursor-not-allowed hover:bg-fuchsia-600' : ''}`}
           disabled={isPending}
         />
+        </fieldset>
       </form>
       <nav className="mt-10 flex flex-col space-y-4">
         <Link to={'/auth/register'}

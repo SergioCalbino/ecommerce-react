@@ -6,7 +6,7 @@ export default function PrivateRoutes() {
     const {isHydrated, token, accessToken } = useAuthStore();
 
     if (!isHydrated) {
-    return <div className="text-white">Cargando...</div>; // o un spinner
+    return <div className="text-white">Cargando...</div>;
   }
     
 
