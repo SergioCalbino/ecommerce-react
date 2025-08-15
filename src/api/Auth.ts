@@ -32,3 +32,9 @@ export async function sendResetPassword(formData:NewPasswordAndResetTokenDto) {
         return data;
         
 }
+
+export async function myProfile() {
+        const { data } = await api.get("/customer/my-profile")
+        return data;
+        
+}
