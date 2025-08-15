@@ -8,6 +8,7 @@ import Register from './features/auth/Register';
 import PrivateRoutes from './pages/PrivateRoutes';
 import RecoverPassword from './features/auth/RecoverPassword';
 import ResetPassword from './features/auth/ResetPassword';
+import CustomerProfile from './features/customer/CustomerProfile';
 
 
 
@@ -20,6 +21,7 @@ const Router = () => {
                 <Route element={<MainLayout/>}>
                     <Route path='/' element={<Dashboard/>} index/>
                     <Route path='/checkout' element={<Checkout/>} />
+                    <Route path='/profile' element={<CustomerProfile/>}/>
                     
                     
                 </Route>
