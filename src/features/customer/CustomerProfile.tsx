@@ -5,6 +5,8 @@ import { useQuery } from "@tanstack/react-query";
 import { useAuthStore } from "@/store/useAuthStore";
 import { ProfileTab } from "./utils/profileTab";
 import { useAuth } from "@/hooks/useAuth";
+import PersonalData from "./options/PersonalData";
+import { myProfile } from "@/api/Auth";
 // import ChangePasswordForm from "@/components/profile/ChangePasswordForm";
 
 export default function CustomerProfile() {
@@ -15,7 +17,11 @@ export default function CustomerProfile() {
   const [activeTab, setActiveTab] = useState<ProfileTab>(ProfileTab.PROFILE);
 
 
-  const { user } = useAuth()
+  // const { user } = useAuth()
+  const { data: user, isLoading } = useQuery({
+  queryKey: ["customer-profile"],
+  queryFn: myProfile,
+});
  
   console.log(user)
   
@@ -46,16 +52,8 @@ export default function CustomerProfile() {
   const renderContent = () => {
     if (activeTab === ProfileTab.PROFILE) {
     //   if (profileLoading) return <Skeleton />;
-      return (
-        <div>
-          <h2 className="text-2xl font-bold mb-4">Información personal</h2>
-          <p><strong>Nombre:</strong> {user?.name} </p>
-          <p><strong>Email:</strong> {user?.email} </p>
-          <p><strong>Teléfono:</strong> {user?.telephone}  </p>
-          <p><strong>Dirección:</strong> {user?.address}  </p>
-        </div>
-      );
-    }
+
+      return  <PersonalData/>   }
 
     if (activeTab ===ProfileTab.SECURITY) {
       return (
