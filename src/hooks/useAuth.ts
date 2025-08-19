@@ -1,23 +1,31 @@
-import { useAuthStore } from '@/store/useAuthStore'
-import  { useEffect } from 'react'
+import { useAuthStore } from '@/store/useAuthStore';
+import { useQuery } from '@tanstack/react-query';
+import { myProfile } from '@/api/Auth';
+import { useEffect } from 'react';
 
 export function useAuth() {
 
-    const { token, user, getMyProfile, isHydrated, accessToken } = useAuthStore();
+  const { accessToken, isHydrated, logout } = useAuthStore();
 
-    useEffect(() => {
-       if (isHydrated && (token || accessToken) && !user) {
-      getMyProfile();
+
+  const { data: user, isLoading, isError } = useQuery({
+    queryKey: ['customer-profile'],
+    queryFn: myProfile,
+    enabled: !!accessToken && isHydrated,
+  });
+
+
+  useEffect(() => {
+    if (isError) {
+      console.error("Error fetching user profile. Logging out...");
+      logout();
     }
-  }, [isHydrated, token, accessToken, user, getMyProfile]);
+  }, [isError, logout]);
 
-  return {
-    user
-
-  }
-
-    
   
-
- 
+  return {
+    user,
+    isLoading,
+    isAuthenticated: !!accessToken,
+  };
 }

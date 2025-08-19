@@ -1,32 +1,26 @@
-
-import { myProfile } from "@/api/Auth";
 import { create } from "zustand";
-import { persist, createJSONStorage } from 'zustand/middleware'
+import { persist, createJSONStorage } from 'zustand/middleware';
 
 interface User {
-    name: string,
-    email: string,
-    role: string,
-    telephone: string,
-    address: string
-
+  name: string;
+  email: string;
+  role: string;
+  telephone: string;
+  address: string;
 }
 
 interface Auth {
-    token: string | null,
-    accessToken: string | null
-    user: User | null,
-    isAuthenticated: boolean,
-    registerAuth: (token: string, user: User) => void,
-    login : (accessToken: string, user: User) => void,
-    getMyProfile: () => Promise<void>, 
-    setUser: (user:User) => void,
-    isHydrated: boolean,
-    setIsHydrated: (v:boolean) => void,
-    logout: () => void;
-    
+  token: string | null;
+  accessToken: string | null;
+  user: User | null;
+  isAuthenticated: boolean;
+  isHydrated: boolean;
+  registerAuth: (token: string, user: User) => void;
+  login: (accessToken: string, user: User) => void;
+  setUser: (user: User) => void;
+  setIsHydrated: (v: boolean) => void;
+  logout: () => void;
 }
-
 
 export const useAuthStore = create<Auth>()(
   persist(
@@ -36,43 +30,28 @@ export const useAuthStore = create<Auth>()(
       user: null,
       isAuthenticated: false,
       isHydrated: false,
-      setIsHydrated: (v) => set({isHydrated: v}),
+      setIsHydrated: (v) => set({ isHydrated: v }),
       setUser: (user) => set({ user }),
-      registerAuth: (token, user) => set({token, user, isAuthenticated: true }),
-
+      registerAuth: (token, user) => set({ token, user, isAuthenticated: true }),
       login: (accessToken, user) => set({ accessToken, user, isAuthenticated: true }),
-      getMyProfile: async () => {
-        try {
-          const profile = await myProfile();
-          set({user: profile, isAuthenticated: true})
-        } catch (error) {
-           console.error("Error fetching profile", error);
-          
-        }
-       
-      },
-      
       logout: () => set({
         token: null,
         accessToken: null,
         user: null,
-        isAuthenticated: false, 
-        
-        }),
+        isAuthenticated: false,
+      }),
     }),
-    
     {
-      name: 'auth', // name of the item in the storage (must be unique)
-      storage: createJSONStorage(() => localStorage), // (optional) by default, 'localStorage' is used
+      name: 'auth',
+      storage: createJSONStorage(() => localStorage),
       partialize: (state) => ({
         token: state.token,
         accessToken: state.accessToken,
-        // user: state.user ? { name: state.user } : null,
-        isAuthenticated: state.isAuthenticated
+        isAuthenticated: state.isAuthenticated,
       }),
-     onRehydrateStorage: () => (state) => {
+      onRehydrateStorage: () => (state) => {
         state?.setIsHydrated(true);
       },
     },
   ),
-)
+);
