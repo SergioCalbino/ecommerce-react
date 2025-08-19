@@ -1,6 +1,7 @@
 import type { RecoveryPassword, ResetPasswordUser, UserLoginForm, UserRegistrationForm } from "@/schemas/auth.schema";
 
 import api from "./axios_client/api";
+import type { CustomerUpdate } from "@/schemas/customer.schema";
 
 
 interface NewPasswordAndResetTokenDto {
@@ -34,7 +35,13 @@ export async function sendResetPassword(formData:NewPasswordAndResetTokenDto) {
 }
 
 export async function myProfile() {
-        const { data } = await api.get("/customer/my-profile")
+        const { data } = await api.get("/api/customer/my-profile")
         return data;
+        
+}
+
+export async function updateProfile(formData: CustomerUpdate) {
+        const { data } = await api.post("/api/customer/update", formData)
+        return data; 
         
 }

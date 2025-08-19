@@ -1,6 +1,5 @@
 import { createAccount } from "@/api/Auth";
 import type { UserRegistrationForm } from "@/schemas/auth.schema";
-import { useAuthStore } from "@/store/useAuthStore";
 import { useMutation } from "@tanstack/react-query";
 import type { AxiosError } from "axios";
 import { useForm } from "react-hook-form";
@@ -9,53 +8,55 @@ import { toast } from "react-toastify";
 
 export default function Register() {
   const initialValues: UserRegistrationForm = {
-    name: '',
-    email: '',
-    password: '',
-    address: '',
-    telephone: '',
-    password_confirmation: ''
+    name: "",
+    email: "",
+    password: "",
+    address: "",
+    telephone: "",
+    password_confirmation: "",
   };
 
-  const { register, handleSubmit, watch, reset, formState: { errors } } = useForm<UserRegistrationForm>({
+  const {
+    register,
+    handleSubmit,
+    watch,
+    reset,
+    formState: { errors },
+  } = useForm<UserRegistrationForm>({
     defaultValues: initialValues,
   });
 
-  const { registerAuth } = useAuthStore();
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const { mutate } = useMutation({
     mutationFn: createAccount,
-    onError: (error: AxiosError<{message:string}>) => { 
-        console.log(error?.response?.data.message)
-        toast.error(error?.response?.data.message)
-
+    onError: (error: AxiosError<{ message: string }>) => {
+      console.log(error?.response?.data.message);
+      toast.error(error?.response?.data.message);
     },
-    onSuccess: (data) => {
-        console.log(data)
-        // const { token, customer } = data;
-        // registerAuth(token, customer)
-        reset()
-        toast.success("Registrado de forma exitosa, serás redireccionado al login" , {
-        onClose:() =>  navigate("/auth/login")
-      })
+    onSuccess: () => {
+      reset();
+      toast.success(
+        "Registrado de forma exitosa, serás redireccionado al login",
+        {
+          onClose: () => navigate("/auth/login"),
+        }
+      );
+    },
+  });
 
-       
-    }
-  })
-
-  const password = watch('password');
+  const password = watch("password");
 
   const handleRegister = (formData: UserRegistrationForm) => {
-    mutate(formData)
-    
+    mutate(formData);
   };
 
   return (
     <div className="max-w-3xl mx-auto mt-10 px-4">
       <h1 className="text-4xl font-black text-white">Crear Cuenta</h1>
       <p className="text-xl font-light text-white mt-3">
-        Llena el formulario para <span className="text-fuchsia-500 font-bold">crear tu cuenta</span>
+        Llena el formulario para{" "}
+        <span className="text-fuchsia-500 font-bold">crear tu cuenta</span>
       </p>
 
       <form
@@ -65,7 +66,9 @@ export default function Register() {
       >
         {/* Email */}
         <div>
-          <label className="font-semibold block mb-1 text-gray-700">Email</label>
+          <label className="font-semibold block mb-1 text-gray-700">
+            Email
+          </label>
           <input
             type="email"
             className="w-full p-2 border border-gray-300 rounded"
@@ -77,12 +80,16 @@ export default function Register() {
               },
             })}
           />
-          {errors.email && <p className="text-red-500 text-sm">{errors.email.message}</p>}
+          {errors.email && (
+            <p className="text-red-500 text-sm">{errors.email.message}</p>
+          )}
         </div>
 
         {/* Nombre */}
         <div>
-          <label className="font-semibold block mb-1 text-gray-700">Nombre</label>
+          <label className="font-semibold block mb-1 text-gray-700">
+            Nombre
+          </label>
           <input
             type="text"
             className="w-full p-2 border border-gray-300 rounded"
@@ -90,12 +97,16 @@ export default function Register() {
               required: "El nombre es obligatorio",
             })}
           />
-          {errors.name && <p className="text-red-500 text-sm">{errors.name.message}</p>}
+          {errors.name && (
+            <p className="text-red-500 text-sm">{errors.name.message}</p>
+          )}
         </div>
 
         {/* Domicilio */}
         <div>
-          <label className="font-semibold block mb-1 text-gray-700">Domicilio</label>
+          <label className="font-semibold block mb-1 text-gray-700">
+            Domicilio
+          </label>
           <input
             type="text"
             className="w-full p-2 border border-gray-300 rounded"
@@ -103,12 +114,16 @@ export default function Register() {
               required: "El domicilio es obligatorio",
             })}
           />
-          {errors.address && <p className="text-red-500 text-sm">{errors.address.message}</p>}
+          {errors.address && (
+            <p className="text-red-500 text-sm">{errors.address.message}</p>
+          )}
         </div>
 
         {/* Teléfono */}
         <div>
-          <label className="font-semibold block mb-1 text-gray-700">Teléfono</label>
+          <label className="font-semibold block mb-1 text-gray-700">
+            Teléfono
+          </label>
           <input
             type="text"
             className="w-full p-2 border border-gray-300 rounded"
@@ -116,12 +131,16 @@ export default function Register() {
               required: "El teléfono es obligatorio",
             })}
           />
-          {errors.telephone && <p className="text-red-500 text-sm">{errors.telephone.message}</p>}
+          {errors.telephone && (
+            <p className="text-red-500 text-sm">{errors.telephone.message}</p>
+          )}
         </div>
 
         {/* Password */}
         <div>
-          <label className="font-semibold block mb-1 text-gray-700">Password</label>
+          <label className="font-semibold block mb-1 text-gray-700">
+            Password
+          </label>
           <input
             type="password"
             className="w-full p-2 border border-gray-300 rounded"
@@ -133,22 +152,29 @@ export default function Register() {
               },
             })}
           />
-          {errors.password && <p className="text-red-500 text-sm">{errors.password.message}</p>}
+          {errors.password && (
+            <p className="text-red-500 text-sm">{errors.password.message}</p>
+          )}
         </div>
 
         {/* Confirmar Password */}
         <div>
-          <label className="font-semibold block mb-1 text-gray-700">Repetir Password</label>
+          <label className="font-semibold block mb-1 text-gray-700">
+            Repetir Password
+          </label>
           <input
             type="password"
             className="w-full p-2 border border-gray-300 rounded"
             {...register("password_confirmation", {
               required: "Este campo es obligatorio",
-              validate: value => value === password || "Los passwords no coinciden",
+              validate: (value) =>
+                value === password || "Los passwords no coinciden",
             })}
           />
           {errors.password_confirmation && (
-            <p className="text-red-500 text-sm">{errors.password_confirmation.message}</p>
+            <p className="text-red-500 text-sm">
+              {errors.password_confirmation.message}
+            </p>
           )}
         </div>
 
@@ -162,17 +188,18 @@ export default function Register() {
         </div>
       </form>
       <nav className="mt-10 flex flex-col space-y-4">
-        <Link to={'/auth/login'}
-            className="text-center text-gray-300 font-normal"
+        <Link
+          to={"/auth/login"}
+          className="text-center text-gray-300 font-normal"
         >
           ¿ Ya tienes cuenta ? Iniciar sesión
         </Link>
-         <Link to={'/auth/forgot-password'}
-            className="text-center text-gray-300 font-normal"
+        <Link
+          to={"/auth/forgot-password"}
+          className="text-center text-gray-300 font-normal"
         >
           ¿ Olvidaste la contraseña ? Recupérala
         </Link>
-
       </nav>
     </div>
   );

@@ -21,9 +21,17 @@ export const checkoutStepOneSchema = customerSchema.pick({
     address: true
 })
 
+export const customerUpdate = customerSchema.pick({
+    name: true,
+    email: true,
+    telephone: true, 
+    address: true
+})
+
 
 export type Customer = z.infer<typeof customerSchema>;
 export type CheckOutStepOne = z.infer<typeof checkoutStepOneSchema>
+export type CustomerUpdate = z.infer<typeof customerUpdate>
 
 
 
