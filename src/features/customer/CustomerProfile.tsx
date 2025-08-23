@@ -7,6 +7,7 @@ import { ProfileTab } from "./utils/profileTab";
 import { useAuth } from "@/hooks/useAuth";
 import PersonalData from "./options/PersonalData";
 import { myProfile } from "@/api/Auth";
+import ChangePasswordForm from "./options/ChangePasswordForm";
 // import ChangePasswordForm from "@/components/profile/ChangePasswordForm";
 
 export default function CustomerProfile() {
@@ -58,8 +59,8 @@ export default function CustomerProfile() {
     if (activeTab ===ProfileTab.SECURITY) {
       return (
         <div>
-          <h2 className="text-2xl font-bold mb-4">Seguridad</h2>
-          {/* <ChangePasswordForm /> */}
+          <h2 className="text-2xl font-bold mb-4">Actualizar Password</h2>
+          <ChangePasswordForm />
         </div>
       );
     }
@@ -115,7 +116,7 @@ export default function CustomerProfile() {
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id as any)}
-              className={`text-left p-2 rounded transition-colors ${
+              className={`text-left p-2 rounded transition-colors cursor-pointer ${
                 activeTab === tab.id
                   ? "bg-fuchsia-600 text-white"
                   : "hover:bg-gray-200"
