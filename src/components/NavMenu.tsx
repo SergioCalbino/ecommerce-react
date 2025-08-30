@@ -1,4 +1,6 @@
-import { useAuthStore } from '@/store/useAuthStore'
+
+
+import { authStore } from '@/store/authStore'
 import {
   Popover,
   PopoverButton,
@@ -11,7 +13,7 @@ import { Link } from 'react-router-dom'
 
 export const NavMenu = () => {
 
-   const { user } = useAuthStore()
+   const { user } = authStore()
 
   return (
     <>

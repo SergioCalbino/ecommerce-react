@@ -4,11 +4,12 @@ import { NavMenu } from "@/components/NavMenu";
 import { ShoppingCartIcon } from "@heroicons/react/20/solid";
 import { useState } from "react";
 import ModalCart from "@/components/ModalCart";
-import { useCartStore } from "@/store/useCartStore";
+
 import { ToastContainer } from "react-toastify";
+import { cartStore } from "@/store/cartStore";
 
 export default function MainLayout() {
-    const { items } = useCartStore();
+    const { items } = cartStore();
 
     const [openCart, setOpenCart] = useState(false);
 

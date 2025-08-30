@@ -22,7 +22,7 @@ interface Auth {
   logout: () => void;
 }
 
-export const useAuthStore = create<Auth>()(
+export const authStore = create<Auth>()(
   persist(
     (set) => ({
       token: null,

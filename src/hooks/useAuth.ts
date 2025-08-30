@@ -1,11 +1,12 @@
-import { useAuthStore } from '@/store/useAuthStore';
+import { myProfile } from '@/api/customer';
+import { authStore } from '@/store/authStore';
 import { useQuery } from '@tanstack/react-query';
-import { myProfile } from '@/api/Auth';
+
 import { useEffect } from 'react';
 
 export function useAuth() {
 
-  const { accessToken, isHydrated, logout } = useAuthStore();
+  const { accessToken, isHydrated, logout } = authStore();
 
 
   const { data: user, isLoading, isError } = useQuery({

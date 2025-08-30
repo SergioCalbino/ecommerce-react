@@ -1,6 +1,7 @@
 import type { Product } from "@/schemas/product.schema";
 import type { Cartitem } from "@/schemas/shoppingCart.schema";
-import { useCartStore } from "@/store/useCartStore";
+import { cartStore } from "@/store/cartStore";
+
 import { getAvailableStock, validateStock } from "@/utils/stockUtils";
 import { useState } from "react";
 import { toast } from "react-toastify";
@@ -12,7 +13,7 @@ type ProductActionsProps = {
 const ProductActions = ({ product }: ProductActionsProps) => {
   const [qty, setQty] = useState(1);
   const [showControl, setShowControl] = useState(false);
-  const { addToCart, items, total } = useCartStore();
+  const { addToCart, items, total } = cartStore();
 
   const handleAccept = () => {
     const cartToItem: Cartitem = {

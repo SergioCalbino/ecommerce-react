@@ -1,6 +1,7 @@
 import { loginAccount } from "@/api/Auth";
 import type { UserLoginForm } from "@/schemas/auth.schema";
-import { useAuthStore } from "@/store/useAuthStore";
+import { authStore } from "@/store/authStore";
+
 import { useMutation } from "@tanstack/react-query";
 import type { AxiosError } from "axios";
 import { useForm } from "react-hook-form";
@@ -16,7 +17,7 @@ export default function Login() {
   }
   const { register, handleSubmit, reset ,formState: { errors } } = useForm({ defaultValues: initialValues })
 
-  const { login, user } = useAuthStore()
+  const { login, user } = authStore()
   const navigate = useNavigate()
 
   console.log(user)
