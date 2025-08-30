@@ -1,7 +1,8 @@
-import { useCartStore } from '@/store/useCartStore'
+import { cartStore } from "@/store/cartStore";
+
 
 const DetailResume = () => {
-  const { items } = useCartStore();
+  const { items } = cartStore();
   const total = items.reduce((acc, item) => acc + item.quantity * item.product.price, 0);
 
   return (

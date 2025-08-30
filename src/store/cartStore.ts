@@ -10,7 +10,7 @@ interface CartState {
     total: number;
 }
 
-export const useCartStore = create<CartState>((set) => ({
+export const cartStore = create<CartState>((set) => ({
     items: [],
     total: 0,
     addToCart: (item) =>

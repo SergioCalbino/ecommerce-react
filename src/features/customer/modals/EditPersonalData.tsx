@@ -1,4 +1,5 @@
-import { updateProfile } from "@/api/Auth";
+
+import { updateProfile } from "@/api/customer";
 import type { CustomerUpdate } from "@/schemas/customer.schema";
 import { XMarkIcon } from "@heroicons/react/20/solid";
 import { useMutation, useQueryClient } from "@tanstack/react-query";

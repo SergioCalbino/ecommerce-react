@@ -1,8 +1,8 @@
 import { PencilSquareIcon } from '@heroicons/react/20/solid'
 import { useState } from 'react';
 import EditPersonalData from '../modals/EditPersonalData';
-import { myProfile } from '@/api/Auth';
 import { useQuery } from '@tanstack/react-query';
+import { myProfile } from '@/api/customer';
 
 
 const PersonalData = () => {

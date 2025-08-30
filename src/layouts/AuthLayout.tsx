@@ -1,12 +1,13 @@
 import Logo from '@/components/Logo'
-import { useAuthStore } from '@/store/useAuthStore';
-import React from 'react'
+import { authStore } from '@/store/authStore';
+
+
 import { Navigate, Outlet } from 'react-router-dom'
 import { ToastContainer } from 'react-toastify'
 
 export default function AuthLayout() {
 
-  const { token } = useAuthStore();
+  const { token } = authStore();
 
   if (token) {
     return <Navigate to="/" replace/>

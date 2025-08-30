@@ -1,13 +1,11 @@
-import { use, useState } from "react";
+import {  useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useQuery } from "@tanstack/react-query";
-// import { getMyProfile, getMyOrders, getMyCart } from "@/api/Customer";
-import { useAuthStore } from "@/store/useAuthStore";
 import { ProfileTab } from "./utils/profileTab";
-import { useAuth } from "@/hooks/useAuth";
 import PersonalData from "./options/PersonalData";
-import { myProfile } from "@/api/Auth";
 import ChangePasswordForm from "./options/ChangePasswordForm";
+import { myProfile } from "@/api/customer";
+import MyCart from "./options/MyCart";
 // import ChangePasswordForm from "@/components/profile/ChangePasswordForm";
 
 export default function CustomerProfile() {
@@ -69,18 +67,8 @@ export default function CustomerProfile() {
     //   if (cartLoading) return <Skeleton />;
       return (
         <div>
-          {/* <h2 className="text-2xl font-bold mb-4">Mi carrito</h2>
-          {cart.items.length === 0 ? (
-            <p>Tu carrito está vacío</p>
-          ) : (
-            <ul>
-              {cart.items.map((item: any) => (
-                <li key={item.id} className="border-b py-2">
-                  {item.product.name} - {item.quantity} x ${item.product.price}
-                </li>
-              ))}
-            </ul>
-          )} */}
+          <h2 className="text-2xl font-bold mb-4">Mi carrito</h2>
+         <MyCart/>
         </div>
       );
     }

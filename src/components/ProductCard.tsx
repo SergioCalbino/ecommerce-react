@@ -1,7 +1,8 @@
 import type { Product } from "@/schemas/product.schema"
 import ProductActions from "./ProductActions"
 import { getAvailableStock } from "@/utils/stockUtils"
-import { useCartStore } from "@/store/useCartStore"
+import { cartStore } from "@/store/cartStore"
+
 
 type ProductCardProps = {
   data: Product[]
@@ -10,7 +11,7 @@ type ProductCardProps = {
 
 const ProductCard = ({ data }: ProductCardProps) => {
 
-	const { items } = useCartStore()
+	const { items } = cartStore()
 
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
