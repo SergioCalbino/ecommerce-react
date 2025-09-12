@@ -11,8 +11,20 @@ export const createOrder = async (order: OrderDto ) => {
         return data
     } catch (error) {
         console.log(error)
+        throw error;
         
         
+    }
+}
+
+export const getOrders = async () => {
+    try {
+        const { data } = await api.get(`${import.meta.env.VITE_API_URL}/order/orders`)
+        console.log(data)
+        return data
+    } catch (error) {
+        console.log(error)
+        throw error;
     }
 }
 

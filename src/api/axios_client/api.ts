@@ -9,15 +9,23 @@ const api = axios.create({
 })
 
 api.interceptors.request.use((config) => {
-    const token = authStore.getState().token;
-    const accessToken = authStore.getState().accessToken
-    if (token) {
-        config.headers.Authorization = `Bearer ${token}`
-    }
-    if (accessToken) {
-        config.headers.Authorization = `Bearer ${accessToken}`
-    }
-    return config;
+  const token = authStore.getState().token;
+  const accessToken = authStore.getState().accessToken;
+  const authToken = accessToken || token;
+
+  if (authToken) {
+    config.headers.Authorization = `Bearer ${authToken}`;
+  }
+
+  console.log("👉 Request:", {
+    url: config.url,
+    method: config.method,
+    headers: config.headers,
+    data: config.data
+  });
+
+  return config;
 });
+
 
 export default api
