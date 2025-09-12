@@ -2,6 +2,7 @@ import type { CheckOutStepOne } from '@/schemas/customer.schema';
 import type { CheckoutStepTwo, OrderDto } from '@/schemas/order.schema';
 import React from 'react'
 import useOrder from '../order/useOrder';
+import { cartStore } from '@/store/cartStore';
 
 
 type CheckoutType = {
@@ -15,6 +16,11 @@ type CheckoutType = {
 
 const CheckoutStepThree = ({step, setStep, customerData, paymentData}:CheckoutType ) => {
 
+  const { total, items } = cartStore();
+
+  console.log("Total en step three:", total);
+  console.log("Items en step three:", items);
+
   const { mutateAsync } = useOrder()
 
     if (!customerData || !paymentData) {
@@ -23,8 +29,19 @@ const CheckoutStepThree = ({step, setStep, customerData, paymentData}:CheckoutTy
         const orderPayload: OrderDto = {
             date: new Date(),
             customerDto: {
-                email: customerData.email  
+                id: customerData.id,
+                email: customerData.email,
+                name: customerData.name,
+                telephone: customerData.telephone,
+                address: customerData.address,
+
             },
+            orderItemDto: items.map(item => ({
+              productId: item.product.id,
+              quantity: item.quantity,
+              unitPrice: item.product.price
+            })),
+            total: total,
             state: "PENDING"
     }
     

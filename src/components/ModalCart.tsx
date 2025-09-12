@@ -1,4 +1,5 @@
 import useShoppingCart from "@/features/shoppingCart/useShoppingCart";
+import { authStore } from "@/store/authStore";
 import { cartStore } from "@/store/cartStore";
 
 
@@ -13,8 +14,12 @@ type modalCartProps = {
 };
 
 const ModalCart = ({ open, onClose }: modalCartProps) => {
+
   const { items, total, remove, clearCart } = cartStore();
+  const { user } = authStore();
   const { mutateAsync } = useShoppingCart();
+
+  console.log("Logueo el customer apra ver que datos tengo ", user)
 
   const navigate = useNavigate();
 
@@ -23,10 +28,11 @@ const ModalCart = ({ open, onClose }: modalCartProps) => {
     console.log("Items que voy a enviar:", items);
     try {
       for (const item of items) {
+
         const payload = {
           customerDto: {
-            customer_id: 11,
-            email: "sergito@gmail.com",
+            customer_id: user?.id || 0,
+            email: user?.email || "",
           },
           quantity: item.quantity,
           productDto: {

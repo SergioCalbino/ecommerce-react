@@ -13,6 +13,7 @@ export const customerSchema = z.object({
 
 //Este schema es para el checkout
 export const checkoutStepOneSchema = customerSchema.pick({
+  id: true,
   name: true,
   email: true,
   telephone: true,

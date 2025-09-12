@@ -6,6 +6,7 @@ import PersonalData from "./options/PersonalData";
 import ChangePasswordForm from "./options/ChangePasswordForm";
 import { myProfile } from "@/api/customer";
 import MyCart from "./options/MyCart";
+import MyOrders from "./options/MyOrders";
 // import ChangePasswordForm from "@/components/profile/ChangePasswordForm";
 
 export default function CustomerProfile() {
@@ -78,6 +79,7 @@ export default function CustomerProfile() {
       return (
         <div>
           <h2 className="text-2xl font-bold mb-4">Mis órdenes</h2>
+          <MyOrders/>
           {/* {orders.length === 0 ? (
             <p>No tienes órdenes aún</p>
           ) : (

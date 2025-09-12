@@ -1,4 +1,5 @@
 import type { CheckOutStepOne } from "@/schemas/customer.schema";
+import { authStore } from "@/store/authStore";
 import { useForm } from "react-hook-form";
 
 
@@ -10,11 +11,14 @@ type checkoutType = {
 
 const CheckoutStepOne = ({ step, setStep, onSubmit }: checkoutType) => {
 
+  const { user } = authStore();
+
     const defaultValues:CheckOutStepOne  = {
-    name: "",
-    email: "",
-    telephone: "",
-    address: ""
+    id: user?.id || 0,
+    name: user?.name || "",
+    email: user?.email || "",
+    telephone: user?.telephone || "",
+    address: user?.address || ""
   }
 
   const { register, handleSubmit, formState: {errors}  } = useForm<CheckOutStepOne>({defaultValues})
