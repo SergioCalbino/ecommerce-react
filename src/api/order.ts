@@ -28,3 +28,15 @@ export const getOrders = async () => {
     }
 }
 
+export const getOrdersPageable = async (page: number, size: number) => {
+    try {
+        const { data } = await api.get(`${import.meta.env.VITE_API_URL}/order/orders-paginated?page=${page}&size=${size}`)
+        console.log(data)
+        return data
+    } catch (error) {
+        console.log(error)
+        throw error;
+        
+    }
+}
+

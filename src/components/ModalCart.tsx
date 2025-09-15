@@ -1,4 +1,4 @@
-import useShoppingCart from "@/features/shoppingCart/useShoppingCart";
+import useShoppingCart from "@/hooks/useShoppingCart";
 import { authStore } from "@/store/authStore";
 import { cartStore } from "@/store/cartStore";
 

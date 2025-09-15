@@ -1,7 +1,7 @@
 import type { CheckOutStepOne } from '@/schemas/customer.schema';
 import type { CheckoutStepTwo, OrderDto } from '@/schemas/order.schema';
 import React from 'react'
-import useOrder from '../order/useOrder';
+import useOrder from '../../hooks/useOrder';
 import { cartStore } from '@/store/cartStore';
 
 
