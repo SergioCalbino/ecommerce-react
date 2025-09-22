@@ -20,20 +20,19 @@ export default function Login() {
   const { login, user } = authStore()
   const navigate = useNavigate()
 
-  console.log(user)
+ 
 
 
   const { mutate, isPending } = useMutation({
     mutationFn: loginAccount,
     onError : (error: AxiosError<{message:string}>) => {
-      console.log(error?.response?.data.message)
       toast.error(error?.response?.data.message)
       
 
     },
     onSuccess: (data) => {
-      const { accessToken, customer } = data;
-      login(accessToken, customer)
+      const { accessToken, refreshToken, customer } = data;
+      login(accessToken, refreshToken, customer)
       toast.success("Logueado de forma exitosa, serás redireccionado" , {
         onClose:() =>  navigate("/")
       })
