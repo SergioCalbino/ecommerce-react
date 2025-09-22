@@ -19,13 +19,12 @@ const ModalCart = ({ open, onClose }: modalCartProps) => {
   const { user } = authStore();
   const { mutateAsync } = useShoppingCart();
 
-  console.log("Logueo el customer apra ver que datos tengo ", user)
 
   const navigate = useNavigate();
 
   //Agrega productos al carrito
   const handleSubmit = async () => {
-    console.log("Items que voy a enviar:", items);
+    
     try {
       for (const item of items) {
 
@@ -42,7 +41,6 @@ const ModalCart = ({ open, onClose }: modalCartProps) => {
         await mutateAsync(payload, { onSuccess: undefined });
       }
       toast.success("Serás redireccionado");
-      console.log("Redirigiendo a checkout", items);
       // clearCart()
       onClose();
       navigate("/checkout");
