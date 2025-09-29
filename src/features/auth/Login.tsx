@@ -27,20 +27,32 @@ export default function Login() {
     mutationFn: loginAccount,
     onError : (error: AxiosError<{message:string}>) => {
       toast.error(error?.response?.data.message)
+      return
       
 
     },
     onSuccess: (data) => {
+      if (!data.accessToken || !data.refreshToken || !data.customer) {
+        toast.error(data.message ?? "Credenciales inválidas");
+        return;
+      }
+
       const { accessToken, refreshToken, customer } = data;
-      login(accessToken, refreshToken, customer)
-      toast.success("Logueado de forma exitosa, serás redireccionado" , {
-        onClose:() =>  navigate("/")
-      })
-      reset()
-     
+      login(accessToken, refreshToken, customer);
 
+      toast.success("Logueado de forma exitosa, serás redireccionado", {
+        onClose: () => {
+          if (customer.role === "ADMIN") {
+            navigate("/admin");
+          } else {
+            navigate("/");
+          }
+        }
+      });
 
+      reset();
     }
+
   })
 
   const handleLogin = (formData: UserLoginForm) => {

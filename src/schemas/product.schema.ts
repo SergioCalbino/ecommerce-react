@@ -31,6 +31,8 @@ export const productPageSchema = z.object({
 
 
 
+
 export type Product = z.infer<typeof productSchema>;
 export type ProductPage = z.infer<typeof productPageSchema>;
+export type CreateProductForm = Pick<Product, 'description' | 'name' | 'price' | 'stock' | 'image' | 'categoryId'>
 
