@@ -1,77 +1,67 @@
-import { useState } from "react";
+import React, { useState } from 'react'
+import { AdminTabs } from './utils/adminTabs';
 import { motion, AnimatePresence } from "framer-motion";
-import { useQuery } from "@tanstack/react-query";
-import { ProfileTab } from "./utils/profileTab";
-import PersonalData from "./options/PersonalData";
-import ChangePasswordForm from "./options/ChangePasswordForm";
-import { myProfile } from "@/api/customer";
-import MyCart from "./options/MyCart";
-import MyOrders from "./options/MyOrders";
-// import ChangePasswordForm from "@/components/profile/ChangePasswordForm";
+import PersonalData from '../customer/options/PersonalData';
+import ChangePasswordForm from '../customer/options/ChangePasswordForm';
+import CreateProduct from './options/CreateProduct';
 
-export default function CustomerProfile() {
-  const [activeTab, setActiveTab] = useState<ProfileTab>(ProfileTab.PROFILE);
 
-  // const { user } = useAuth()
-  useQuery({
-    queryKey: ["customer-profile"],
-    queryFn: myProfile,
-  });
+
+
+
+
+export const AdminProfile = () => {
+  const [activeTab, setActiveTab] = useState<AdminTabs>(AdminTabs.PROFILE);
+
+
 
  
 
   const tabs = [
-    { id: ProfileTab.PROFILE, label: "Información personal" },
-    { id: ProfileTab.SECURITY, label: "Seguridad" },
-    { id: ProfileTab.CART, label: "Mi carrito" },
-    { id: ProfileTab.ORDERS, label: "Mis órdenes" },
+    { id: AdminTabs.PROFILE, label: "Información personal" },
+    { id: AdminTabs.PASSWORD, label: "Cambiar contraseña" },
+    { id: AdminTabs.PRODUCTS, label: "Productos" },
+    { id: AdminTabs.CATEGORIES, label: "Categorias" },
+    
   ];
   const renderContent = () => {
-    if (activeTab === ProfileTab.PROFILE) {
+    if (activeTab === AdminTabs.PROFILE) {
       //   if (profileLoading) return <Skeleton />;
 
-      return <PersonalData />;
+    return <PersonalData />;
     }
 
-    if (activeTab === ProfileTab.SECURITY) {
+    if (activeTab === AdminTabs.PASSWORD) {
+      //   if (profileLoading) return <Skeleton />;
+
+      return (
+      <div>
+            <h2 className="text-center text-2xl font-bold mb-4">Actualizar Password</h2>
+            <ChangePasswordForm />
+          </div>
+
+      )
+    }
+
+    if (activeTab === AdminTabs.PRODUCTS) {
       return (
         <div>
-          <h2 className="text-2xl font-bold mb-4">Actualizar Password</h2>
-          <ChangePasswordForm />
+          <h2 className="text-center text-2xl font-bold mb-4">Crear Producto</h2>
+         <CreateProduct/>
         </div>
       );
     }
 
-    if (activeTab === ProfileTab.CART) {
+    if (activeTab === AdminTabs.CATEGORIES) {
       //   if (cartLoading) return <Skeleton />;
       return (
         <div>
           <h2 className="text-2xl font-bold mb-4">Mi carrito</h2>
-          <MyCart />
+          {/* <MyCart /> */}
         </div>
       );
     }
 
-    if (activeTab === ProfileTab.ORDERS) {
-      //   if (ordersLoading) return <Skeleton />;
-      return (
-        <div>
-          <h2 className="text-2xl font-bold mb-4">Mis órdenes</h2>
-          <MyOrders />
-          {/* {orders.length === 0 ? (
-            <p>No tienes órdenes aún</p>
-          ) : (
-            <ul>
-              {orders.map((order: any) => (
-                <li key={order.id} className="border-b py-2">
-                  Orden #{order.id} - Estado: {order.status} - Total: ${order.total}
-                </li>
-              ))}
-            </ul>
-          )} */}
-        </div>
-      );
-    }
   };
 
   return (

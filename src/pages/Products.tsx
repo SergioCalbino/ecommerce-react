@@ -1,6 +1,6 @@
 import Pagination from "@/components/Pagination";
 import ProductCard from "@/components/ProductCard";
-import useProductsQuery from "@/hooks/useProductsQuery";
+import {useProductsQuery} from "@/hooks/useProductsQuery";
 import { useState } from "react";
 
 

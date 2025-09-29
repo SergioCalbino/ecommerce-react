@@ -9,6 +9,8 @@ export const customerSchema = z.object({
   address: z.string().optional(),
   orders: orderBaseSchema.array().optional(),
   telephone: z.string().optional(),
+ role: z.enum(["CUSTOMER", "ADMIN"]).default("CUSTOMER")
+
 });
 
 //Este schema es para el checkout

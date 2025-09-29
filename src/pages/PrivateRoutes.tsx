@@ -1,20 +1,24 @@
-
 import { authStore } from '@/store/authStore';
 import { Navigate, Outlet } from 'react-router-dom';
 
-export default function PrivateRoutes() {
+export type roleProps = {
+  role: "CUSTOMER" | "ADMIN"
+}
 
-    const {isHydrated, token, accessToken } = authStore();
+export default function PrivateRoutes({ role }: roleProps) {
+  const { isHydrated, token, accessToken, user, refreshToken } = authStore();
 
-    if (!isHydrated) {
+  if (!isHydrated) {
     return <div className="text-white">Cargando...</div>;
   }
-    
 
-    return token || accessToken  ? <Outlet/> : <Navigate to="/auth/login" replace/>
+  if (!(token || accessToken || refreshToken) || !user) {
+    return <Navigate to="/auth/login" replace />;
+  }
 
+  if (user.role !== role) {
+    return <Navigate to="/" replace />;
+  }
 
-  
-  
-
+  return <Outlet />;
 }
