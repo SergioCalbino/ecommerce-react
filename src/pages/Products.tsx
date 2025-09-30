@@ -1,6 +1,6 @@
 import Pagination from "@/components/Pagination";
 import ProductCard from "@/components/ProductCard";
-import {useProductsQuery} from "@/hooks/useProductsQuery";
+import { useProductsQuery } from "@/hooks/useProductsQuery";
 import { useState } from "react";
 
 
@@ -11,7 +11,7 @@ const Products = () => {
   const { data, isLoading, isError, error } = useProductsQuery(page);
 
 
- 
+
 
   return (
     <div>
@@ -19,24 +19,24 @@ const Products = () => {
       {isError && <p>Error: {error.message}</p>}
 
       <h3 className="text-2xl font-black mt-7">Productos</h3>
-     
+
       <div className="bg-white">
         <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
           {/* ✅ Contenedor de las cards */}
-         
-           <ProductCard
-             data={data?.content || []}
-           />
-           {/* <ProductExample
+
+          <ProductCard
+            data={data?.content || []}
+          />
+          {/* <ProductExample
               data={data?.content || []}
            /> */}
-        
-            <Pagination
-              currentPage={ page }
-              totalPages={data?.totalPages || 1}
-              onPageChange={(newpage) => {setPage(newpage)}}
 
-            />
+          <Pagination
+            currentPage={page}
+            totalPages={data?.totalPages || 1}
+            onPageChange={(newpage) => { setPage(newpage) }}
+
+          />
         </div>
       </div>
     </div>

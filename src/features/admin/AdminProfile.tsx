@@ -1,53 +1,46 @@
-import React, { useState } from 'react'
-import { AdminTabs } from './utils/adminTabs';
+import  { useState } from "react";
+import { AdminTabs } from "./utils/adminTabs";
 import { motion, AnimatePresence } from "framer-motion";
-import PersonalData from '../customer/options/PersonalData';
-import ChangePasswordForm from '../customer/options/ChangePasswordForm';
-import CreateProduct from './options/CreateProduct';
-
-
-
-
-
+import PersonalData from "../customer/options/PersonalData";
+import ChangePasswordForm from "../customer/options/ChangePasswordForm";
+import CreateProduct from "./options/CreateProduct";
 
 export const AdminProfile = () => {
   const [activeTab, setActiveTab] = useState<AdminTabs>(AdminTabs.PROFILE);
-
-
-
- 
 
   const tabs = [
     { id: AdminTabs.PROFILE, label: "Información personal" },
     { id: AdminTabs.PASSWORD, label: "Cambiar contraseña" },
     { id: AdminTabs.PRODUCTS, label: "Productos" },
     { id: AdminTabs.CATEGORIES, label: "Categorias" },
-    
   ];
   const renderContent = () => {
     if (activeTab === AdminTabs.PROFILE) {
       //   if (profileLoading) return <Skeleton />;
 
-    return <PersonalData />;
+      return <PersonalData />;
     }
 
     if (activeTab === AdminTabs.PASSWORD) {
       //   if (profileLoading) return <Skeleton />;
 
       return (
-      <div>
-            <h2 className="text-center text-2xl font-bold mb-4">Actualizar Password</h2>
-            <ChangePasswordForm />
-          </div>
-
-      )
+        <div>
+          <h2 className="text-center text-2xl font-bold mb-4">
+            Actualizar Password
+          </h2>
+          <ChangePasswordForm />
+        </div>
+      );
     }
 
     if (activeTab === AdminTabs.PRODUCTS) {
       return (
         <div>
-          <h2 className="text-center text-2xl font-bold mb-4">Crear Producto</h2>
-         <CreateProduct/>
+          <h2 className="text-center text-2xl font-bold mb-4">
+            Crear Producto
+          </h2>
+          <CreateProduct />
         </div>
       );
     }
@@ -61,7 +54,6 @@ export const AdminProfile = () => {
         </div>
       );
     }
-
   };
 
   return (
@@ -102,7 +94,7 @@ export const AdminProfile = () => {
       </main>
     </div>
   );
-}
+};
 
 // Loader tipo skeleton
 function Skeleton() {

@@ -1,5 +1,4 @@
 import type { ShoppingCartDto } from "@/schemas/shoppingCart.schema"
-import axios from "axios"
 import api from "./axios_client/api"
 
 
