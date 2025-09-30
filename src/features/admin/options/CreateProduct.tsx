@@ -1,177 +1,205 @@
 import uploadImage from '@/cloudinary/uploadImage'
+import useGetCategories from '@/hooks/useCategories'
 import { useCreateProduct } from '@/hooks/useProductsQuery'
+import type { Category } from '@/schemas/category.schema'
 import type { CreateProductForm } from '@/schemas/product.schema'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 
 const CreateProduct = () => {
+  const [image, setImage] = useState<File | null>(null)
+  const [preview, setPreview] = useState<string | null>(null)
 
-  const [image, setimage] = useState<File | null >(null)
+  const initialValues: CreateProductForm = {
+    name: '',
+    description: '',
+    price: 0,
+    stock: 0,
+    image: '',
+    categoryId: 0
+  }
 
-    const initialValues: CreateProductForm = {
-        name: '',
-        description: '',
-        price: 0,
-        stock: 0,
-        image: '',
-        categoryId: 0
+  const { register, handleSubmit, reset, formState: { errors } } = useForm<CreateProductForm>({
+    defaultValues: initialValues
+  });
+  const { mutate } = useCreateProduct()
 
-    }
+  const handleCreate = async (formData: CreateProductForm) => {
+    if (!image) return
 
-    const { register, handleSubmit, reset, formState: { errors }} = useForm<CreateProductForm>({
-        defaultValues:initialValues
-    });
-    const { mutate } = useCreateProduct()
+    const imageUrl = await uploadImage(image)
+    const finalImageurl = imageUrl.imageUrl
 
-    const handleCreate = async (formData: CreateProductForm) => {
-      if (!image) {
-        return 
+    mutate({
+      ...formData,
+      price: Number(formData.price),
+      stock: Number(formData.stock),
+      categoryId: Number(formData.categoryId),
+      image: finalImageurl
+    })
+
+    reset()
+    setImage(null)
+    setPreview(null)
+  }
+
+  const { data: categories } = useGetCategories()
+  console.log(categories)
+
+  const handleImageChange = (file: File | null) => {
+    setImage(file)
+    if (file) {
+      const reader = new FileReader()
+      reader.onloadend = () => {
+        setPreview(reader.result as string)
       }
-       const imageUrl = await uploadImage(image as File)
-       const finalImageurl = imageUrl.imageUrl
-        console.log(formData)
-        mutate({
-          ...formData,
-          price: Number(formData.price), 
-        stock: Number(formData.stock), 
-        categoryId: Number(formData.categoryId), 
-          image: finalImageurl
-        })
-        reset()
-        
-
+      reader.readAsDataURL(file)
+    } else {
+      setPreview(null)
     }
+  }
 
-   return (
-    <div className="max-w-3xl mx-auto mt-10 px-4">
+  return (
+    <div className="max-w-2xl mx-auto mt-10">
+      <h1 className="text-2xl font-bold text-gray-800 mb-6 text-center">
+        Crear nuevo producto
+      </h1>
 
       <form
         onSubmit={handleSubmit(handleCreate)}
-        className="grid grid-cols-1 md:grid-cols-2 gap-6 bg-white p-8 mt-8 rounded-md shadow"
+        className="space-y-6 bg-white p-8 rounded-xl shadow-md"
         noValidate
       >
         {/* Name */}
         <div>
-          <label className="font-semibold block mb-1 text-gray-700">
-            Nombre 
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            Nombre
           </label>
           <input
             type="text"
-            className="w-full p-2 border border-gray-300 rounded"
-            {...register("name", {
-              required: "El Nombre es obligatorio",
-              
-            })}
+            placeholder="Ej: Camiseta deportiva"
+            className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-fuchsia-500 outline-none"
+            {...register("name", { required: "El nombre es obligatorio" })}
           />
-          {errors.name && (
-            <p className="text-red-500 text-sm">{errors.name.message}</p>
-          )}
+          {errors.name && <p className="text-red-500 text-sm">{errors.name.message}</p>}
         </div>
 
         {/* Price */}
         <div>
-          <label className="font-semibold block mb-1 text-gray-700">
+          <label className="block text-sm font-medium text-gray-700 mb-1">
             Precio
           </label>
           <input
             type="number"
-            className="w-full p-2 border border-gray-300 rounded"
-            {...register("price", {
-              required: "El precio es obligatorio",
-            })}
+            placeholder="Ej: 1200"
+            min={0}
+            className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-fuchsia-500 outline-none"
+            {...register("price", { required: "El precio es obligatorio", min:{ value: 1, message: "El precio debe ser mayor a cero" } })}
           />
-          {errors.price && (
-            <p className="text-red-500 text-sm">{errors.price.message}</p>
-          )}
+          {errors.price && <p className="text-red-500 text-sm">{errors.price.message}</p>}
         </div>
 
         {/* Descripcion */}
         <div>
-          <label className="font-semibold block mb-1 text-gray-700">
-            Descripcion
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            Descripción
           </label>
-          <input
-            type="text"
-            className="w-full p-2 border border-gray-300 rounded"
-            {...register("description", {
-              required: "La descripcion es obligatoria",
-            })}
+          <textarea
+            rows={3}
+            placeholder="Detalles del producto..."
+            className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-fuchsia-500 outline-none resize-none"
+            {...register("description", { required: "La descripción es obligatoria" })}
           />
-          {errors.description && (
-            <p className="text-red-500 text-sm">{errors.description.message}</p>
-          )}
+          {errors.description && <p className="text-red-500 text-sm">{errors.description.message}</p>}
         </div>
 
-        {/* Image */}
+        {/* Imagen */}
         <div>
-          <label className="font-semibold block mb-1 text-gray-700">
+          <label className="block text-sm font-medium text-gray-700 mb-2">
             Imagen
           </label>
           <input
             type="file"
-            className="w-full p-2 border border-gray-300 rounded"
-            {...register("image", {
-              required: "La imagen es obligatoria",
-            })}
-            onChange={(e) => setimage(e.target.files?.[0] ?? null)}
+            className="w-full text-sm text-gray-600
+                       file:mr-4 file:py-2 file:px-4
+                       file:rounded-full file:border-0
+                       file:text-sm file:font-semibold
+                       file:bg-fuchsia-100 file:text-fuchsia-700
+                       hover:file:bg-fuchsia-200"
+            {...register("image", { required: "La imagen es obligatoria" })}
+            onChange={(e) => handleImageChange(e.target.files?.[0] ?? null)}
           />
-          {errors.image && (
-            <p className="text-red-500 text-sm">{errors.image.message}</p>
+          {preview && (
+            <>
+            <div className="mt-3">
+              <img src={preview} alt="Preview" className="w-32 h-32 object-cover rounded-lg shadow" />
+            </div>
+            <button
+            type="button"
+            onClick={() => {
+              setImage(null)
+              setPreview(null)
+            }}
+            className="mt-2 px-3 py-1 bg-red-500 text-white text-sm rounded-lg hover:bg-red-600 transition"
+          >
+            Eliminar imagen
+          </button>
+            </>
           )}
+          {errors.image && <p className="text-red-500 text-sm">{errors.image.message}</p>}
         </div>
 
         {/* Stock */}
         <div>
-          <label className="font-semibold block mb-1 text-gray-700">
+          <label className="block text-sm font-medium text-gray-700 mb-1">
             Stock
           </label>
           <input
             type="number"
-            className="w-full p-2 border border-gray-300 rounded"
-            {...register("stock", {
-              required: "El Stock es obligatorio",
-              min: 0,
-             
-              
-            })}
+            placeholder="Ej: 50"
+            className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-fuchsia-500 outline-none"
+            {...register("stock", { required: "El stock es obligatorio", min: { value: 1, message: "El stock debe ser mayor a cero" } })}
           />
-          {errors.stock && (
-            <p className="text-red-500 text-sm">{errors.stock.message}</p>
-          )}
+          {errors.stock && <p className="text-red-500 text-sm">{errors.stock.message}</p>}
         </div>
+
         {/* Categoria */}
         <div>
-          <label className="font-semibold block mb-1 text-gray-700">
-            Categoria
+          <label className="block text-sm font-medium text-gray-700 mb-1">
+            Categoría
           </label>
-          <input
+          {/* <input
             type="number"
-            className="w-full p-2 border border-gray-300 rounded"
-            {...register("categoryId", {
-              required: "El numero de categoria es obligatorio",
-              min: 0,
-             
-              
-            })}
+            placeholder="Ej: 1"
+            className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-fuchsia-500 outline-none"
+            {...register("categoryId", { required: "La categoría es obligatoria", min: 0 })}
           />
-          {errors.categoryId && (
-            <p className="text-red-500 text-sm">{errors.categoryId.message}</p>
-          )}
+          {errors.categoryId && <p className="text-red-500 text-sm">{errors.categoryId.message}</p>} */}
+          <select className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-fuchsia-500 outline-none"
+            {...register("categoryId", { required: "La categoría es obligatoria", min: { value: 1, message: "La categoria seleccionada no existe"} })}
+            onChange={(e) => console.log(e.target)}
+          >
+            <option value={0}> Selecciona una categoría </option>
+            {categories?.map((category: Category) => (
+              <option key={category.id} value={category.id}> {category.name} </option>
+            ))}
+
+          </select>
+          {errors.categoryId && <p className="text-red-500 text-sm">{errors.categoryId.message}</p>}
         </div>
 
-
-        {/* Botón de envío (ocupa 2 columnas) */}
-        <div className="md:col-span-2">
-          <input
+        {/* Botón */}
+        <div className="pt-4">
+          <button
             type="submit"
-            value="Crear Producto"
-            className="bg-fuchsia-600 hover:bg-fuchsia-700 w-full text-white font-bold py-3 rounded cursor-pointer transition-colors"
-          />
+            className="w-full bg-fuchsia-600 hover:bg-fuchsia-700 text-white font-bold py-3 rounded-lg transition"
+          >
+            Crear Producto
+          </button>
         </div>
       </form>
-      
     </div>
-  );
+  )
 }
 
 export default CreateProduct

@@ -1,4 +1,7 @@
-import { productPageSchema, type CreateProductForm } from "@/schemas/product.schema";
+import {
+  productPageSchema,
+  type CreateProductForm,
+} from "@/schemas/product.schema";
 import api from "./axios_client/api";
 
 export async function getProducts(page: number = 0, size: number = 8) {
@@ -7,16 +10,11 @@ export async function getProducts(page: number = 0, size: number = 8) {
 }
 
 export async function createProductApi(formData: CreateProductForm) {
-    console.log(formData)
-    try {
-        const response = await api.post(`/api/products`, formData )
-        console.log(response)
-        return response
-        
-    } catch (error) {
-        console.log(error)
-        throw error 
-        
-    }
-    
+  try {
+    const response = await api.post(`/api/products`, formData);
+    return response;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
 }
