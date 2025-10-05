@@ -1,5 +1,5 @@
 import uploadImage from '@/cloudinary/uploadImage'
-import useGetCategories from '@/hooks/useCategories'
+import {useGetCategories} from '@/hooks/useCategories'
 import { useCreateProduct } from '@/hooks/useProductsQuery'
 import type { Category } from '@/schemas/category.schema'
 import type { CreateProductForm } from '@/schemas/product.schema'
@@ -61,9 +61,9 @@ const CreateProduct = () => {
 
   return (
     <div className="max-w-2xl mx-auto mt-10">
-      <h1 className="text-2xl font-bold text-gray-800 mb-6 text-center">
+      {/* <h1 className="text-2xl font-bold text-gray-800 mb-6 text-center">
         Crear nuevo producto
-      </h1>
+      </h1> */}
 
       <form
         onSubmit={handleSubmit(handleCreate)}

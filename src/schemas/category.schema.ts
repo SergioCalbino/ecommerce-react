@@ -12,3 +12,4 @@ import { productSchema } from "./product.schema";
  })
 
  export type Category = z.infer<typeof categorySchema>;
+ export type CategoryCreate = Pick<Category, 'name'>

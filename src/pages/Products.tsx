@@ -1,17 +1,25 @@
 import Pagination from "@/components/Pagination";
 import ProductCard from "@/components/ProductCard";
+import useDebounce from "@/hooks/useDebounce";
 import { useProductsQuery } from "@/hooks/useProductsQuery";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
+const Products = ({ searchTerm }: { searchTerm: string }) => {
+  console.log(searchTerm);
 
-const Products = () => {
+  const [page, setPage] = useState(0);
+  const debounceSearchTerm = useDebounce(searchTerm, 500);
+  const size = 8;
 
-  const [page, setPage] = useState(0)
+  const { data, isLoading, isError, error } = useProductsQuery(
+    page,
+    size,
+    debounceSearchTerm
+  );
 
-  const { data, isLoading, isError, error } = useProductsQuery(page);
-
-
-
+  useEffect(() => {
+    setPage(0);
+  }, [debounceSearchTerm]);
 
   return (
     <div>
@@ -24,9 +32,7 @@ const Products = () => {
         <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
           {/* ✅ Contenedor de las cards */}
 
-          <ProductCard
-            data={data?.content || []}
-          />
+          <ProductCard data={data?.content || []} />
           {/* <ProductExample
               data={data?.content || []}
            /> */}
@@ -34,14 +40,14 @@ const Products = () => {
           <Pagination
             currentPage={page}
             totalPages={data?.totalPages || 1}
-            onPageChange={(newpage) => { setPage(newpage) }}
-
+            onPageChange={(newpage) => {
+              setPage(newpage);
+            }}
           />
         </div>
       </div>
     </div>
-  )
-}
-
+  );
+};
 
 export default Products;

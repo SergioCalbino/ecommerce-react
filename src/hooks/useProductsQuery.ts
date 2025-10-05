@@ -4,10 +4,11 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import type { AxiosError } from "axios";
 import { toast } from "react-toastify";
 
-const useProductsQuery = (page: number = 0, size: number = 8) => {
+const useProductsQuery = (page: number = 0, size: number = 8, debounceSearchTerm: string) => {
   return useQuery<ProductPage>({
-    queryKey: ["products", page],
-    queryFn: () => getProducts(page, size),
+    queryKey: ["products", page, size, debounceSearchTerm],
+    queryFn: () => getProducts(page, size, debounceSearchTerm),
+    // keepPreviousData: true,
   });
 };
 
