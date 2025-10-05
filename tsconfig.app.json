@@ -18,7 +18,11 @@
       "@utils/*": ["utils/*"],
       "@stores/*": ["stores/*"],
       "@styles/*": ["styles/*"],
-      "@assets/*": ["assets/*"]
+      "@assets/*": ["assets/*"],
+      "@store/*":["store/*"],
+      "@features/*":["features/*"],
+      "@schemas/*":["schemas/*"],
+
     },
 
     /* Bundler mode */

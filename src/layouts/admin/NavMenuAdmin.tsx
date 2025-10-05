@@ -1,21 +1,15 @@
-
-
 import { authStore } from '@/store/authStore'
-import {
-  Popover,
-  PopoverButton,
-  PopoverPanel,
-  Transition
-} from '@headlessui/react'
+import { Popover, PopoverButton, PopoverPanel, Transition } from '@headlessui/react'
 import { Bars3Icon } from '@heroicons/react/20/solid'
 import React from 'react'
 import { Link } from 'react-router-dom'
 
-export const NavMenu = () => {
+export const NavMenuAdmin = () => {
 
-   const { user, logout } = authStore() 
+       const { user, logout } = authStore() 
+    
 
-  return (
+ return (
     <>
     
       <Popover className='relative'>
@@ -36,7 +30,7 @@ export const NavMenu = () => {
             <div className='w-full lg:w-56 shrink rounded-xl bg-white p-4 text-sm font-semibold leading-6 text-gray-900 shadow-lg ring-1 ring-gray-900/5'>
               <p className='text-center'>Hola: {user?.name}</p>
               <Link
-                to='/profile'
+                to='/admin-profile'
                 className='block p-2 hover:text-purple-950'
               >
                 Mi Perfil

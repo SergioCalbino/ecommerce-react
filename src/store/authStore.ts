@@ -5,7 +5,7 @@ interface User {
   id: number;
   name: string;
   email: string;
-  role: string;
+  role: "CUSTOMER" | "ADMIN";
   telephone: string;
   address: string;
 }
@@ -38,12 +38,17 @@ export const authStore = create<Auth>()(
       setUser: (user) => set({ user }),
       registerAuth: (token, user) => set({ token, user, isAuthenticated: true }),
       login: (accessToken, refreshToken, user) => set({ accessToken, refreshToken, user, isAuthenticated: true }),
-      logout: () => set({
-        token: null,
-        accessToken: null,
-        user: null,
-        isAuthenticated: false,
-      }),
+      logout: () => {
+        set({
+          token: null,
+          accessToken: null,
+          refreshToken: null,
+          user: null,
+          isAuthenticated: false,
+        });
+        localStorage.removeItem("auth"); 
+      },
+
       refreshAccessToken: async () => {
         const state = get();
         if (!state.refreshToken) return null;
@@ -63,7 +68,7 @@ export const authStore = create<Auth>()(
           set({
             accessToken: data.accessToken,
             refreshToken: data.refreshToken,
-            user: data.user,
+            user: data.customer,
             isAuthenticated: true,
           });
 
@@ -88,7 +93,8 @@ export const authStore = create<Auth>()(
         // token: state.token,
         accessToken: state.accessToken,
         isAuthenticated: state.isAuthenticated,
-        refreshToken: state.refreshToken
+        refreshToken: state.refreshToken,
+        user: state.user
       }),
       onRehydrateStorage: () => (state) => {
         state?.setIsHydrated(true);
