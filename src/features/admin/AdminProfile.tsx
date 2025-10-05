@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import PersonalData from "../customer/options/PersonalData";
 import ChangePasswordForm from "../customer/options/ChangePasswordForm";
 import CreateProduct from "./options/CreateProduct";
+import CreateCategory from "./options/CreateCategory";
 
 export const AdminProfile = () => {
   const [activeTab, setActiveTab] = useState<AdminTabs>(AdminTabs.PROFILE);
@@ -49,8 +50,8 @@ export const AdminProfile = () => {
       //   if (cartLoading) return <Skeleton />;
       return (
         <div>
-          <h2 className="text-2xl font-bold mb-4">Mi carrito</h2>
-          {/* <MyCart /> */}
+          <h2 className="text-center text-2xl font-bold mb-4">Crear Categoria</h2>
+          <CreateCategory/>
         </div>
       );
     }

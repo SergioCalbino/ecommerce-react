@@ -4,8 +4,19 @@ import {
 } from "@/schemas/product.schema";
 import api from "./axios_client/api";
 
-export async function getProducts(page: number = 0, size: number = 8) {
-  const response = await api.get(`/api/products?page=${page}&size=${size}`);
+export async function getProducts(page: number = 0, size: number = 8, searchTerm?: string) {
+
+  const params = new URLSearchParams({
+    page: page.toString(),
+    size: size.toString(),
+  })
+
+  if (searchTerm){
+
+    params.append("name", searchTerm)
+  }
+
+  const response = await api.get(`/api/products?${params.toString()}`);
   return productPageSchema.parse(response.data);
 }
 
