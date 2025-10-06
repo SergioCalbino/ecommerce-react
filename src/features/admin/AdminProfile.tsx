@@ -3,8 +3,9 @@ import { AdminTabs } from "./utils/adminTabs";
 import { motion, AnimatePresence } from "framer-motion";
 import PersonalData from "../customer/options/PersonalData";
 import ChangePasswordForm from "../customer/options/ChangePasswordForm";
-import CreateProduct from "./options/CreateProduct";
+import CreateProduct from "./options/ProductForm";
 import CreateCategory from "./options/CreateCategory";
+import ProductManagement from "./options/ProductManagement";
 
 export const AdminProfile = () => {
   const [activeTab, setActiveTab] = useState<AdminTabs>(AdminTabs.PROFILE);
@@ -39,9 +40,9 @@ export const AdminProfile = () => {
       return (
         <div>
           <h2 className="text-center text-2xl font-bold mb-4">
-            Crear Producto
+            Administrar Productos
           </h2>
-          <CreateProduct />
+          <ProductManagement />
         </div>
       );
     }

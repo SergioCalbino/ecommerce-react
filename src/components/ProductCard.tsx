@@ -5,9 +5,10 @@ import { cartStore } from "@/store/cartStore";
 
 type ProductCardProps = {
   data: Product[];
+  onEditProduct: (product: Product) => void
 };
 
-const ProductCard = ({ data }: ProductCardProps) => {
+const ProductCard = ({ data, onEditProduct }: ProductCardProps) => {
   const { items } = cartStore();
 
   return (
@@ -51,7 +52,7 @@ const ProductCard = ({ data }: ProductCardProps) => {
             <div className="mt-4 flex gap-4 justify-center">
               {}
               <div>
-                <ProductActions product={product} />
+                <ProductActions product={product} onEditProduct={onEditProduct} />
               </div>
             </div>
           </div>

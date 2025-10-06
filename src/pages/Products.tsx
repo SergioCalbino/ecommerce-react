@@ -2,9 +2,17 @@ import Pagination from "@/components/Pagination";
 import ProductCard from "@/components/ProductCard";
 import useDebounce from "@/hooks/useDebounce";
 import { useProductsQuery } from "@/hooks/useProductsQuery";
+import type { Product } from "@/schemas/product.schema";
 import { useEffect, useState } from "react";
 
-const Products = ({ searchTerm }: { searchTerm: string }) => {
+
+export interface ProductsProps {
+  searchTerm: string;
+  onEditProduct: (product: Product) => void
+}
+
+
+const Products = ({ searchTerm, onEditProduct }: ProductsProps) => {
   console.log(searchTerm);
 
   const [page, setPage] = useState(0);
@@ -32,7 +40,7 @@ const Products = ({ searchTerm }: { searchTerm: string }) => {
         <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
           {/* ✅ Contenedor de las cards */}
 
-          <ProductCard data={data?.content || []} />
+          <ProductCard data={data?.content || []} onEditProduct={onEditProduct} />
           {/* <ProductExample
               data={data?.content || []}
            /> */}

@@ -2,13 +2,24 @@ import uploadImage from '@/cloudinary/uploadImage'
 import {useGetCategories} from '@/hooks/useCategories'
 import { useCreateProduct } from '@/hooks/useProductsQuery'
 import type { Category } from '@/schemas/category.schema'
-import type { CreateProductForm } from '@/schemas/product.schema'
-import { useState } from 'react'
+import type { CreateProductForm, Product } from '@/schemas/product.schema'
+import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 
-const CreateProduct = () => {
+
+interface CreateProductProps {
+  onClose: () => void,
+  productToEdit: Product | null
+}
+
+
+const ProductForm = ({onClose, productToEdit}: CreateProductProps) => {
   const [image, setImage] = useState<File | null>(null)
   const [preview, setPreview] = useState<string | null>(null)
+
+  const isEditing = !!productToEdit
+  console.log(isEditing)
+
 
   const initialValues: CreateProductForm = {
     name: '',
@@ -20,8 +31,23 @@ const CreateProduct = () => {
   }
 
   const { register, handleSubmit, reset, formState: { errors } } = useForm<CreateProductForm>({
-    defaultValues: initialValues
+    defaultValues: productToEdit ? productToEdit : initialValues
   });
+
+
+  useEffect(() => {
+    if (isEditing) {
+      reset(productToEdit)
+      setPreview(productToEdit?.image || null)
+      
+    } else {
+      reset(initialValues)
+      setPreview(null)
+    }
+    
+  }, [isEditing, productToEdit, reset])
+  
+
   const { mutate } = useCreateProduct()
 
   const handleCreate = async (formData: CreateProductForm) => {
@@ -61,9 +87,23 @@ const CreateProduct = () => {
 
   return (
     <div className="max-w-2xl mx-auto mt-10">
-      {/* <h1 className="text-2xl font-bold text-gray-800 mb-6 text-center">
-        Crear nuevo producto
-      </h1> */}
+      <h1 className="text-2xl font-bold text-gray-800 mb-6 text-center">
+        {isEditing ? "Editar Producto" : "Crear nuevo producto"}
+        
+      </h1>
+
+      <div className="max-w-2xl relative"> 
+      {/* --- BOTÓN DE CERRAR --- */}
+      <button 
+        type="button" // Importante para que no envíe el formulario
+        onClick={onClose} 
+        className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition"
+      >
+        {/* Usamos un SVG para un ícono de 'X' más nítido */}
+        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      </button>
 
       <form
         onSubmit={handleSubmit(handleCreate)}
@@ -194,12 +234,14 @@ const CreateProduct = () => {
             type="submit"
             className="w-full bg-fuchsia-600 hover:bg-fuchsia-700 text-white font-bold py-3 rounded-lg transition"
           >
-            Crear Producto
+            {isEditing ? "Guardar Cambios" : "Crear Producto"}
+           
           </button>
         </div>
       </form>
     </div>
+    </div>
   )
 }
 
-export default CreateProduct
+export default ProductForm
