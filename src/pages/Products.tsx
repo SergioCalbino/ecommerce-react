@@ -1,23 +1,22 @@
 import Pagination from "@/components/Pagination";
-import ProductCard from "@/components/ProductCard";
+import ProductGrid from "@/components/ProductGrid";
+
 import useDebounce from "@/hooks/useDebounce";
 import { useProductsQuery } from "@/hooks/useProductsQuery";
 import type { Product } from "@/schemas/product.schema";
 import { useEffect, useState } from "react";
 
-
 export interface ProductsProps {
   searchTerm: string;
-  onEditProduct: (product: Product) => void
+  onEditProduct: (product: Product) => void;
 }
 
-
 const Products = ({ searchTerm, onEditProduct }: ProductsProps) => {
-  console.log(searchTerm);
-
   const [page, setPage] = useState(0);
   const debounceSearchTerm = useDebounce(searchTerm, 500);
-  const size = 8;
+  
+  // Usamos 12 para que la grilla se vea completa (múltiplo de 2, 3 y 4)
+  const size = 12;
 
   const { data, isLoading, isError, error } = useProductsQuery(
     page,
@@ -31,19 +30,12 @@ const Products = ({ searchTerm, onEditProduct }: ProductsProps) => {
 
   return (
     <div>
-      {isLoading && <p>Loading...</p>}
-      {isError && <p>Error: {error.message}</p>}
-
-      <h3 className="text-2xl font-black mt-7">Productos</h3>
+      {isLoading && <p className="text-center p-4">Cargando productos...</p>}
+      {isError && <p className="text-center p-4 text-red-500">Error: {error.message}</p>}
 
       <div className="bg-white">
         <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
-          {/* ✅ Contenedor de las cards */}
-
-          <ProductCard data={data?.content || []} onEditProduct={onEditProduct} />
-          {/* <ProductExample
-              data={data?.content || []}
-           /> */}
+          <ProductGrid data={data?.content || []} onEditProduct={onEditProduct} />
 
           <Pagination
             currentPage={page}

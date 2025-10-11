@@ -1,10 +1,11 @@
 import uploadImage from '@/cloudinary/uploadImage'
 import {useGetCategories} from '@/hooks/useCategories'
-import { useCreateProduct } from '@/hooks/useProductsQuery'
+import { useCreateProduct, useUpdateProduct } from '@/hooks/useProductsQuery'
 import type { Category } from '@/schemas/category.schema'
 import type { CreateProductForm, Product } from '@/schemas/product.schema'
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
+import { toast } from 'react-toastify'
 
 
 interface CreateProductProps {
@@ -35,8 +36,15 @@ const ProductForm = ({onClose, productToEdit}: CreateProductProps) => {
   });
 
 
+  const { mutate: createProductMutate } = useCreateProduct()
+  const { mutate: updateProductMutate } = useUpdateProduct()
+  const { data: categories } = useGetCategories()
+
+
+
   useEffect(() => {
-    if (isEditing) {
+    if (isEditing && productToEdit) {
+      console.log(productToEdit)
       reset(productToEdit)
       setPreview(productToEdit?.image || null)
       
@@ -48,30 +56,6 @@ const ProductForm = ({onClose, productToEdit}: CreateProductProps) => {
   }, [isEditing, productToEdit, reset])
   
 
-  const { mutate } = useCreateProduct()
-
-  const handleCreate = async (formData: CreateProductForm) => {
-    if (!image) return
-
-    const imageUrl = await uploadImage(image)
-    const finalImageurl = imageUrl.imageUrl
-
-    mutate({
-      ...formData,
-      price: Number(formData.price),
-      stock: Number(formData.stock),
-      categoryId: Number(formData.categoryId),
-      image: finalImageurl
-    })
-
-    reset()
-    setImage(null)
-    setPreview(null)
-  }
-
-  const { data: categories } = useGetCategories()
-  console.log(categories)
-
   const handleImageChange = (file: File | null) => {
     setImage(file)
     if (file) {
@@ -81,9 +65,56 @@ const ProductForm = ({onClose, productToEdit}: CreateProductProps) => {
       }
       reader.readAsDataURL(file)
     } else {
-      setPreview(null)
+      setPreview(isEditing ? productToEdit?.image || null : null)
     }
   }
+
+  console.log(productToEdit)
+
+  const handleSave = async (formData: CreateProductForm) => {
+    let finalImageurl = productToEdit?.image || ''
+    if (image) {
+      const uploadedImage = await uploadImage(image)
+      finalImageurl = uploadedImage.imageUrl
+
+    }
+
+
+    // Solo validamos que la imagen exista si estamos CREANDO
+    if (!finalImageurl && !isEditing) {
+      toast.error("Por favor seleccione una imagen")
+      return
+      
+    }
+
+    const finalData ={
+      ...formData,
+      price: Number(formData.price),
+      stock: Number(formData.stock),
+      categoryId: Number(formData.categoryId),
+      image: finalImageurl
+    }
+
+    
+
+    if (isEditing && productToEdit) {
+      updateProductMutate({formData: finalData, productId: productToEdit.id})
+      onClose()
+      
+      return
+    
+    } else {
+      createProductMutate(finalData)
+      onClose()
+       reset()
+    setImage(null)
+    setPreview(null)
+      return
+    }
+
+  }
+
+
 
   return (
     <div className="max-w-2xl mx-auto mt-10">
@@ -106,7 +137,7 @@ const ProductForm = ({onClose, productToEdit}: CreateProductProps) => {
       </button>
 
       <form
-        onSubmit={handleSubmit(handleCreate)}
+        onSubmit={handleSubmit(handleSave)}
         className="space-y-6 bg-white p-8 rounded-xl shadow-md"
         noValidate
       >
@@ -166,7 +197,7 @@ const ProductForm = ({onClose, productToEdit}: CreateProductProps) => {
                        file:text-sm file:font-semibold
                        file:bg-fuchsia-100 file:text-fuchsia-700
                        hover:file:bg-fuchsia-200"
-            {...register("image", { required: "La imagen es obligatoria" })}
+            {...register("image", { required: !isEditing ? "La imagen es obligatoria" : false })}
             onChange={(e) => handleImageChange(e.target.files?.[0] ?? null)}
           />
           {preview && (

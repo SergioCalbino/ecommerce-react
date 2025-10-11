@@ -24,7 +24,7 @@ const ProductActions = ({ product, onEditProduct }: ProductActionsProps) => {
   // ======================================================
   if (isAdmin) {
     return (
-      <div className="flex mt-4 gap-4">
+      <div className="flex flex-col sm:flex-row mt-4 gap-4">
         <button 
           className="w-full bg-fuchsia-600 hover:bg-fuchsia-700 text-white font-bold py-2 px-4 rounded transition cursor-pointer"
           onClick={() => onEditProduct(product)}
