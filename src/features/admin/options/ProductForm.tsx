@@ -1,14 +1,26 @@
 import uploadImage from '@/cloudinary/uploadImage'
 import {useGetCategories} from '@/hooks/useCategories'
-import { useCreateProduct } from '@/hooks/useProductsQuery'
+import { useCreateProduct, useUpdateProduct } from '@/hooks/useProductsQuery'
 import type { Category } from '@/schemas/category.schema'
-import type { CreateProductForm } from '@/schemas/product.schema'
-import { useState } from 'react'
+import type { CreateProductForm, Product } from '@/schemas/product.schema'
+import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
+import { toast } from 'react-toastify'
 
-const CreateProduct = () => {
+
+interface CreateProductProps {
+  onClose: () => void,
+  productToEdit: Product | null
+}
+
+
+const ProductForm = ({onClose, productToEdit}: CreateProductProps) => {
   const [image, setImage] = useState<File | null>(null)
   const [preview, setPreview] = useState<string | null>(null)
+
+  const isEditing = !!productToEdit
+  console.log(isEditing)
+
 
   const initialValues: CreateProductForm = {
     name: '',
@@ -20,31 +32,29 @@ const CreateProduct = () => {
   }
 
   const { register, handleSubmit, reset, formState: { errors } } = useForm<CreateProductForm>({
-    defaultValues: initialValues
+    defaultValues: productToEdit ? productToEdit : initialValues
   });
-  const { mutate } = useCreateProduct()
 
-  const handleCreate = async (formData: CreateProductForm) => {
-    if (!image) return
 
-    const imageUrl = await uploadImage(image)
-    const finalImageurl = imageUrl.imageUrl
-
-    mutate({
-      ...formData,
-      price: Number(formData.price),
-      stock: Number(formData.stock),
-      categoryId: Number(formData.categoryId),
-      image: finalImageurl
-    })
-
-    reset()
-    setImage(null)
-    setPreview(null)
-  }
-
+  const { mutate: createProductMutate } = useCreateProduct()
+  const { mutate: updateProductMutate } = useUpdateProduct()
   const { data: categories } = useGetCategories()
-  console.log(categories)
+
+
+
+  useEffect(() => {
+    if (isEditing && productToEdit) {
+      console.log(productToEdit)
+      reset(productToEdit)
+      setPreview(productToEdit?.image || null)
+      
+    } else {
+      reset(initialValues)
+      setPreview(null)
+    }
+    
+  }, [isEditing, productToEdit, reset])
+  
 
   const handleImageChange = (file: File | null) => {
     setImage(file)
@@ -55,18 +65,79 @@ const CreateProduct = () => {
       }
       reader.readAsDataURL(file)
     } else {
-      setPreview(null)
+      setPreview(isEditing ? productToEdit?.image || null : null)
     }
   }
 
+  console.log(productToEdit)
+
+  const handleSave = async (formData: CreateProductForm) => {
+    let finalImageurl = productToEdit?.image || ''
+    if (image) {
+      const uploadedImage = await uploadImage(image)
+      finalImageurl = uploadedImage.imageUrl
+
+    }
+
+
+    // Solo validamos que la imagen exista si estamos CREANDO
+    if (!finalImageurl && !isEditing) {
+      toast.error("Por favor seleccione una imagen")
+      return
+      
+    }
+
+    const finalData ={
+      ...formData,
+      price: Number(formData.price),
+      stock: Number(formData.stock),
+      categoryId: Number(formData.categoryId),
+      image: finalImageurl
+    }
+
+    
+
+    if (isEditing && productToEdit) {
+      updateProductMutate({formData: finalData, productId: productToEdit.id})
+      onClose()
+      
+      return
+    
+    } else {
+      createProductMutate(finalData)
+      onClose()
+       reset()
+    setImage(null)
+    setPreview(null)
+      return
+    }
+
+  }
+
+
+
   return (
     <div className="max-w-2xl mx-auto mt-10">
-      {/* <h1 className="text-2xl font-bold text-gray-800 mb-6 text-center">
-        Crear nuevo producto
-      </h1> */}
+      <h1 className="text-2xl font-bold text-gray-800 mb-6 text-center">
+        {isEditing ? "Editar Producto" : "Crear nuevo producto"}
+        
+      </h1>
+
+      <div className="max-w-2xl relative"> 
+      {/* --- BOTÓN DE CERRAR --- */}
+      <button 
+        type="button" // Importante para que no envíe el formulario
+        onClick={onClose} 
+        className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition"
+      >
+        {/* Usamos un SVG para un ícono de 'X' más nítido */}
+        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      </button>
 
       <form
-        onSubmit={handleSubmit(handleCreate)}
+        onSubmit={handleSubmit(handleSave)}
         className="space-y-6 bg-white p-8 rounded-xl shadow-md"
         noValidate
       >
@@ -126,7 +197,7 @@ const CreateProduct = () => {
                        file:text-sm file:font-semibold
                        file:bg-fuchsia-100 file:text-fuchsia-700
                        hover:file:bg-fuchsia-200"
-            {...register("image", { required: "La imagen es obligatoria" })}
+            {...register("image", { required: !isEditing ? "La imagen es obligatoria" : false })}
             onChange={(e) => handleImageChange(e.target.files?.[0] ?? null)}
           />
           {preview && (
@@ -194,12 +265,14 @@ const CreateProduct = () => {
             type="submit"
             className="w-full bg-fuchsia-600 hover:bg-fuchsia-700 text-white font-bold py-3 rounded-lg transition"
           >
-            Crear Producto
+            {isEditing ? "Guardar Cambios" : "Crear Producto"}
+           
           </button>
         </div>
       </form>
     </div>
+    </div>
   )
 }
 
-export default CreateProduct
+export default ProductForm

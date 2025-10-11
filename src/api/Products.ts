@@ -1,6 +1,7 @@
 import {
   productPageSchema,
   type CreateProductForm,
+  type UpdateProductForm,
 } from "@/schemas/product.schema";
 import api from "./axios_client/api";
 
@@ -28,4 +29,17 @@ export async function createProductApi(formData: CreateProductForm) {
     console.log(error);
     throw error;
   }
+}
+
+export async function updateProductApi(formData:UpdateProductForm, productId: number) {
+  try {
+    const response = await api.put(`/api/products/${productId}`, formData)
+    return response;
+    
+  } catch (error) {
+    console.log(error)
+    throw error
+    
+  }
+  
 }
