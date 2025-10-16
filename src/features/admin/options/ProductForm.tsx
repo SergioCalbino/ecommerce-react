@@ -263,7 +263,7 @@ const ProductForm = ({onClose, productToEdit}: CreateProductProps) => {
         <div className="pt-4">
           <button
             type="submit"
-            className="w-full bg-fuchsia-600 hover:bg-fuchsia-700 text-white font-bold py-3 rounded-lg transition"
+            className="w-full bg-fuchsia-600 hover:bg-fuchsia-700 text-white font-bold py-3 rounded-lg transition cursor-pointer"
           >
             {isEditing ? "Guardar Cambios" : "Crear Producto"}
            
