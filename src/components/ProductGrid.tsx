@@ -4,9 +4,11 @@ import ProductCard from "./ProductCard";
 type ProductGridProps = {
   data: Product[];
   onEditProduct: (product: Product) => void;
+  onDeleteProduct: (product: Product) => void;
+
 };
 
-const ProductGrid = ({ data, onEditProduct }: ProductGridProps) => {
+const ProductGrid = ({ data, onEditProduct, onDeleteProduct }: ProductGridProps) => {
   return (
     // Contenedor Flexbox que permite que las tarjetas salten a la siguiente línea
     <div className="grid gap-6 grid-cols-[repeat(auto-fill,minmax(250px,1fr))]">
@@ -16,6 +18,7 @@ const ProductGrid = ({ data, onEditProduct }: ProductGridProps) => {
           key={product.id} 
           product={product} 
           onEditProduct={onEditProduct} 
+          onDeleteProduct={onDeleteProduct}
         />
       ))}
     </div>

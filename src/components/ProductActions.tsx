@@ -9,9 +9,11 @@ import { toast } from "react-toastify";
 type ProductActionsProps = {
   product: Product;
   onEditProduct: (product: Product) => void;
+  onDeleteProduct: (product: Product) => void;
+
 };
 
-const ProductActions = ({ product, onEditProduct }: ProductActionsProps) => {
+const ProductActions = ({ product, onEditProduct, onDeleteProduct }: ProductActionsProps) => {
   const [qty, setQty] = useState(1);
   const [showControl, setShowControl] = useState(false);
   const { addToCart, items } = cartStore();
@@ -33,6 +35,8 @@ const ProductActions = ({ product, onEditProduct }: ProductActionsProps) => {
         </button>
         <button
           className="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded transition cursor-pointer"
+          onClick={() => onDeleteProduct(product)}
+          
         >
           Eliminar
         </button>
