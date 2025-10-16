@@ -6,9 +6,11 @@ import { cartStore } from "@/store/cartStore";
 type ProductCardProps = {
   product: Product;
   onEditProduct: (product: Product) => void;
+  onDeleteProduct: (product: Product) => void;
+
 };
 
-const ProductCard = ({ product, onEditProduct }: ProductCardProps) => {
+const ProductCard = ({ product, onEditProduct, onDeleteProduct }: ProductCardProps) => {
   const { items } = cartStore();
   const availableStock = getAvailableStock(items, product);
 
@@ -49,8 +51,8 @@ const ProductCard = ({ product, onEditProduct }: ProductCardProps) => {
           </div>
         </div>
       </div>
-      
-      <ProductActions product={product} onEditProduct={onEditProduct} />
+
+      <ProductActions product={product} onEditProduct={onEditProduct} onDeleteProduct={onDeleteProduct} />
     </div>
   );
 };

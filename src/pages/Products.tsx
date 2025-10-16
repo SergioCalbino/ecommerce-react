@@ -9,9 +9,10 @@ import { useEffect, useState } from "react";
 export interface ProductsProps {
   searchTerm: string;
   onEditProduct: (product: Product) => void;
+  onDeleteProduct: (product: Product) => void;
 }
 
-const Products = ({ searchTerm, onEditProduct }: ProductsProps) => {
+const Products = ({ searchTerm, onEditProduct, onDeleteProduct }: ProductsProps) => {
   const [page, setPage] = useState(0);
   const debounceSearchTerm = useDebounce(searchTerm, 500);
   
@@ -35,7 +36,7 @@ const Products = ({ searchTerm, onEditProduct }: ProductsProps) => {
 
       <div className="bg-white">
         <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
-          <ProductGrid data={data?.content || []} onEditProduct={onEditProduct} />
+          <ProductGrid data={data?.content || []} onEditProduct={onEditProduct} onDeleteProduct={onDeleteProduct} />
 
           <Pagination
             currentPage={page}
