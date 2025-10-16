@@ -1,7 +1,13 @@
 import { useState } from "react"
 import Products from "../Products"
+import type { Product } from "@/schemas/product.schema";
 
 
+export interface ProductsProps {
+  searchTerm: string;
+  onEditProduct: (product: Product) => void;
+  onDeleteProduct: (product: Product) => void;
+}
 
 
 const Dashboard = () => {
@@ -25,6 +31,8 @@ const Dashboard = () => {
       
       <Products 
         searchTerm={searchTerm}
+        onEditProduct={() => {}} // Lo paso asi porque en el customer dashboard no se editan productos
+        onDeleteProduct={() => {}} // Lo paso asi porque en el customer dashboard no se eliminan productos
       />
     </>
   )
