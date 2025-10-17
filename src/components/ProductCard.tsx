@@ -7,10 +7,15 @@ type ProductCardProps = {
   product: Product;
   onEditProduct: (product: Product) => void;
   onDeleteProduct: (product: Product) => void;
-
+  onReactivateProduct: (product: Product) => void;
 };
 
-const ProductCard = ({ product, onEditProduct, onDeleteProduct }: ProductCardProps) => {
+const ProductCard = ({
+  product,
+  onEditProduct,
+  onDeleteProduct,
+  onReactivateProduct,
+}: ProductCardProps) => {
   const { items } = cartStore();
   const availableStock = getAvailableStock(items, product);
 
@@ -18,17 +23,25 @@ const ProductCard = ({ product, onEditProduct, onDeleteProduct }: ProductCardPro
     // h-full asegura que todas las tarjetas de una fila tengan la misma altura
     // flex/flex-col/justify-between empuja los botones de acción hacia abajo
     <div className="group relative border p-4 rounded-md shadow hover:shadow-lg transition h-full flex flex-col justify-between">
-      
       <div>
-        <img
-          src={
-            product.image?.trim()
-              ? product.image
-              : "https://tailwindui.com/img/ecommerce-images/product-page-01-related-product-01.jpg"
-          }
-          alt={product.name}
-          className="aspect-square w-full rounded-md bg-gray-200 object-cover group-hover:opacity-75"
-        />
+        <div className="relative">
+          <img
+            src={
+              product.image?.trim()
+                ? product.image
+                : "https://tailwindui.com/img/ecommerce-images/product-page-01-related-product-01.jpg"
+            }
+            alt={product.name}
+            className="aspect-square w-full rounded-md bg-gray-200 object-cover group-hover:opacity-75"
+          />
+          <div
+            className={`absolute top-2 right-2 px-2 py-1 text-xs font-bold text-white rounded-full ${
+              product.active ? "bg-green-500" : "bg-gray-500"
+            }`}
+          >
+            {product.active ? "Activo" : "Inactivo"}
+          </div>
+        </div>
         <div className="mt-4 flex justify-between">
           <div className="min-w-0 pr-2">
             <h3 className="text-sm text-gray-700 font-semibold truncate">
@@ -52,7 +65,12 @@ const ProductCard = ({ product, onEditProduct, onDeleteProduct }: ProductCardPro
         </div>
       </div>
 
-      <ProductActions product={product} onEditProduct={onEditProduct} onDeleteProduct={onDeleteProduct} />
+      <ProductActions
+        product={product}
+        onEditProduct={onEditProduct}
+        onDeleteProduct={onDeleteProduct}
+        onReactivateProduct={onReactivateProduct}
+      />
     </div>
   );
 };
