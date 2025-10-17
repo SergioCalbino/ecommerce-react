@@ -28,7 +28,8 @@ const ProductForm = ({onClose, productToEdit}: CreateProductProps) => {
     price: 0,
     stock: 0,
     image: '',
-    categoryId: 0
+    categoryId: 0,
+    
   }
 
   const { register, handleSubmit, reset, formState: { errors } } = useForm<CreateProductForm>({

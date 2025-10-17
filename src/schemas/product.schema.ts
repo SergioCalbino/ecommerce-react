@@ -9,6 +9,7 @@ export const productSchema = z.object({
     stock: z.number().int().nonnegative(),
     categoryId: z.number().int().positive(),
     categoryName: z.string().optional(),
+    active: z.boolean().optional()
 });
 
 export const productPageSchema = z.object({
@@ -34,6 +35,6 @@ export const productPageSchema = z.object({
 
 export type Product = z.infer<typeof productSchema>;
 export type ProductPage = z.infer<typeof productPageSchema>;
-export type CreateProductForm = Pick<Product, 'description' | 'name' | 'price' | 'stock' | 'image' | 'categoryId'>
-export type UpdateProductForm =  Pick<Product, 'description' | 'name' | 'price' | 'stock' | 'image' | 'categoryId'>
+export type CreateProductForm = Pick<Product, 'description' | 'name' | 'price' | 'stock' | 'image' | 'categoryId' | 'active'>;
+export type UpdateProductForm =  Pick<Product, 'description' | 'name' | 'price' | 'stock' | 'image' | 'categoryId' | 'active'>;
 
