@@ -10,9 +10,10 @@ export interface ProductsProps {
   searchTerm: string;
   onEditProduct: (product: Product) => void;
   onDeleteProduct: (product: Product) => void;
+  onReactivateProduct: (product: Product) => void;
 }
 
-const Products = ({ searchTerm, onEditProduct, onDeleteProduct }: ProductsProps) => {
+const Products = ({ searchTerm, onEditProduct, onDeleteProduct, onReactivateProduct }: ProductsProps) => {
   const [page, setPage] = useState(0);
   const debounceSearchTerm = useDebounce(searchTerm, 500);
   
@@ -36,7 +37,7 @@ const Products = ({ searchTerm, onEditProduct, onDeleteProduct }: ProductsProps)
 
       <div className="bg-white">
         <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
-          <ProductGrid data={data?.content || []} onEditProduct={onEditProduct} onDeleteProduct={onDeleteProduct} />
+          <ProductGrid data={data?.content || []} onEditProduct={onEditProduct} onDeleteProduct={onDeleteProduct} onReactivateProduct={onReactivateProduct} />
 
           <Pagination
             currentPage={page}

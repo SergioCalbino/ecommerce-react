@@ -63,7 +63,6 @@ export const authStore = create<Auth>()(
           if (!response.ok) throw new Error("No se pudo refrescar el token");
 
           const data = await response.json();
-          console.log("Data del refresh token:", data);
 
           set({
             accessToken: data.accessToken,

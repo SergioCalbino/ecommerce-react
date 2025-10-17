@@ -3,7 +3,6 @@ import api from "./axios_client/api";
 
 export async function myProfile() {
   const { data } = await api.get("/api/customer/my-profile");
-  console.log(data)
   return data;
 }
 
