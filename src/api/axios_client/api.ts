@@ -3,7 +3,7 @@ import axios from "axios";
 
 
 const api = axios.create({
-    baseURL: import.meta.env.VITE_API_URL
+  baseURL: import.meta.env.VITE_API_URL
 })
 
 // Interceptor para requests → agrega accessToken
@@ -26,7 +26,6 @@ api.interceptors.response.use(
       originalRequest._retry = true;
 
       const newAccessToken = await authStore.getState().refreshAccessToken();
-      console.log("el newAcceesToken", newAccessToken)
 
       if (newAccessToken) {
         originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;

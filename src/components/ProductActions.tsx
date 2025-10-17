@@ -10,10 +10,11 @@ type ProductActionsProps = {
   product: Product;
   onEditProduct: (product: Product) => void;
   onDeleteProduct: (product: Product) => void;
+  onReactivateProduct: (product: Product) => void;
 
 };
 
-const ProductActions = ({ product, onEditProduct, onDeleteProduct }: ProductActionsProps) => {
+const ProductActions = ({ product, onEditProduct, onDeleteProduct, onReactivateProduct }: ProductActionsProps) => {
   const [qty, setQty] = useState(1);
   const [showControl, setShowControl] = useState(false);
   const { addToCart, items } = cartStore();
@@ -26,6 +27,7 @@ const ProductActions = ({ product, onEditProduct, onDeleteProduct }: ProductActi
   // ======================================================
   if (isAdmin) {
     return (
+
       <div className="flex flex-col sm:flex-row mt-4 gap-4">
         <button 
           className="w-full bg-fuchsia-600 hover:bg-fuchsia-700 text-white font-bold py-2 px-4 rounded transition cursor-pointer"
@@ -33,13 +35,23 @@ const ProductActions = ({ product, onEditProduct, onDeleteProduct }: ProductActi
         >
           Editar
         </button>
-        <button
-          className="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded transition cursor-pointer"
-          onClick={() => onDeleteProduct(product)}
-          
-        >
-          Eliminar
-        </button>
+        { product.active ? (
+          <button
+            className="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded transition cursor-pointer"
+            onClick={() => onDeleteProduct(product)}
+            
+          >
+            Eliminar
+          </button>
+
+        ) : (
+          <button
+            className="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded transition cursor-pointer"
+            onClick={() => onReactivateProduct(product)}
+          >
+            Reactivar
+          </button>
+        )}
       </div>
     );
   }

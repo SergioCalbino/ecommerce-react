@@ -1,4 +1,4 @@
-import { createProductApi, deleteProductApi, getProducts, updateProductApi } from "@/api/Products";
+import { createProductApi, deleteProductApi, getProducts, reactivateProduct, updateProductApi } from "@/api/Products";
 import type { CreateProductForm, ProductPage } from "@/schemas/product.schema";
 import { QueryClient, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import type { AxiosError } from "axios";
@@ -88,4 +88,25 @@ const useDeleteProduct = () => {
   });
 }
 
-export { useProductsQuery, useCreateProduct, useUpdateProduct, useDeleteProduct };
+const useReactivateProduct = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (productId: number) => reactivateProduct(productId),
+    onError: (error: AxiosError<{messages?: Record<string, string>}>) => {
+      const data = error.response?.data;
+      if (data?.messages && typeof data.messages === "object") {
+        Object.values(data.messages).forEach((msg) => {
+          toast.error(msg);
+        });
+      } else {
+        toast.error("Error desconocido");
+      }
+    },
+    onSuccess: () => {
+      toast.success("Producto reactivado de forma correcta");
+      queryClient.invalidateQueries({ queryKey: ["products"] });
+    },
+  });
+}
+
+export { useProductsQuery, useCreateProduct, useUpdateProduct, useDeleteProduct, useReactivateProduct };
